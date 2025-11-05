@@ -1,0 +1,951 @@
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+main {
+    display: block;
+}
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+hr {
+    box-sizing: content-box;
+    height: 0;
+    overflow: visible;
+}
+
+pre {
+    font-family: monospace, monospace;
+    font-size: 1em;
+}
+
+a {
+    background-color: transparent;
+}
+
+b,
+strong {
+    font-weight: bolder;
+}
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+sup {
+    top: -0.5em;
+}
+
+/* Embedded content
+	 ========================================================================== */
+
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+img {
+    border-style: none;
+}
+
+/* Forms
+	 ========================================================================== */
+
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+button,
+input {
+    overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+button,
+select {
+    text-transform: none;
+}
+
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText;
+}
+
+/**
+ * Correct the padding in Firefox.
+ */
+fieldset {
+    padding: 0.35em 0.75em 0.625em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *		`fieldset` elements in all browsers.
+ */
+legend {
+    box-sizing: border-box;
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    padding: 0;
+    white-space: normal;
+}
+
+/**
+ * Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+progress {
+    vertical-align: baseline;
+}
+
+/**
+ * Remove the default vertical scrollbar in IE 10+.
+ */
+textarea {
+    overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10.
+ * 2. Remove the padding in IE 10.
+ */
+[type="checkbox"],
+[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+/**
+ * Remove the inner padding in Chrome and Safari on macOS.
+ */
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+}
+
+/* Interactive
+	 ========================================================================== */
+
+/*
+ * Add the correct display in Edge, IE 10+, and Firefox.
+ */
+details {
+    display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+summary {
+    display: list-item;
+}
+
+/* Misc
+	 ========================================================================== */
+
+/**
+ * Add the correct display in IE 10+.
+ */
+template {
+    display: none;
+}
+
+/**
+ * Add the correct display in IE 10.
+ */
+[hidden] {
+    display: none;
+}
+
+/* Box sizing
+--------------------------------------------- */
+
+/* Inherit box-sizing to more easily change it's value on a component level.
+@link http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+
+/* Elements
+--------------------------------------------- */
+body {
+    background: #111111;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #e9b328;
+}
+
+img {
+    max-width: 100%;
+    height: auto
+}
+
+a {
+    text-decoration: none;
+}
+
+.site {
+    padding: 15px;
+}
+
+.site.login {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.site-header>div.site-branding {
+    width: 100%;
+    max-width: 245px;
+    margin: 0 auto 30px
+}
+
+.inner .site-header>div.site-branding {
+    max-width: 90px;
+}
+
+.site-main {
+    position: relative;
+}
+
+.site-main.cart-open {
+    padding-bottom: 65px;
+}
+
+.search-form {
+    margin-bottom: 15px;
+}
+
+.search-form form {
+    position: relative;
+}
+
+.clear-search {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    padding: 10px 15px;
+    line-height: 1;
+    font-size: 20px;
+}
+
+.form-control:disabled{
+    background-color: transparent;
+    opacity: 0.75;
+}
+
+.search-form form::after {
+    content: '\f002';
+    font-family: "Font Awesome 6 Free";
+    font-weight: 700;
+    position: absolute;
+    transform: translate(0, -50%);
+    right: 15px;
+    top: 50%;
+    font-size: 18px;
+    color: #e9b328;
+}
+
+.search-form input {
+    width: 100%;
+    margin: 0 auto;
+    padding: 10px 15px;
+    border: 2px solid #e9b328;
+    color: #e9b328;
+    background-color: transparent;
+}
+
+.search-form input::placeholder {
+    color: #e9b328;
+    opacity: 0.5;
+}
+
+.search-form input:focus {
+    color: #e9b328;
+    background-color: transparent;
+    border-color: #e9b328;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(233, 179, 40, .25);
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list .item-category {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    border: 2px solid #e9b328;
+    color: #e9b328;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    /*-webkit-transition: ease 0.25s all;
+    -o-transition: ease 0.25s all;
+    transition: ease 0.25s all;*/
+}
+
+form.list {
+    align-items: stretch
+}
+
+.form-group {
+    position: relative;
+    width: 100%;
+}
+
+form.list .form-group {
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+form.list .form-group input {
+    padding: 10px 15px;
+    border: 2px solid #e9b328;
+    color: #e9b328;
+    background-color: transparent;
+}
+
+form.list .form-group .input-error {
+    font-size: 12px;
+    color: red;
+}
+
+form.list input::placeholder {
+    color: #e9b328;
+    opacity: 0.5
+}
+
+form.list input:focus {
+    color: #e9b328;
+    background-color: transparent;
+    border-color: #e9b328;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(233, 179, 40, .25);
+}
+
+form.list button {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border: 2px solid #e9b328;
+    background-color: #e9b328;
+    color: #111111;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 11px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+form.list button:hover {
+    background-color: #e9b328;
+    color: #111111;
+}
+
+.list .item-category.active {
+    background-color: #e9b328;
+    color: #111111;
+}
+
+.list .item-category>span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+
+/*.list a.item-category.active i {
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}*/
+
+.list .item-list {
+    width: 100%;
+    position: relative;
+}
+
+.list .item-list.show {
+    display: block;
+}
+
+.list .item-list .sub-category-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+    padding-bottom: 15px;
+    margin-bottom: 0;
+    border-bottom: 1px dashed #d3d3d3;
+}
+
+.list .item-list a.item-category {
+    display: block;
+    text-align: center;
+    border-color: #8e8d8a;
+    color: #8e8d8a;
+    padding: 6px 15px;
+    width: calc(50% - 5px);
+}
+
+.list .item-list a.item-category>span {
+    width: 100% !important;
+    text-align: center;
+}
+
+.list .item-list a.item-category.active {
+    background-color: #8e8d8a;
+    color: #ffffff;
+}
+
+.list .item-list .no-item {
+    font-size: 21px;
+    text-align: center;
+    padding: 20px 0;
+    color: #8e8d8a;
+}
+
+.list .item-list.show br {
+    display: none;
+}
+
+.list .item-list .item {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 15px 0;
+    margin-bottom: 0;
+    border-bottom: 1px dashed #d3d3d3;
+}
+
+.list .item-list .item .img {
+    width: 80px;
+    border: 1px solid #e9b328;
+    background-color: #e9b328;
+    border-radius: 5px;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.list .item-list .item .meta {
+    position: relative;
+    width: calc(100% - 80px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+
+.list .item-list .item .meta .meta-info {
+    width: calc(100% - 100px)
+}
+
+.list .item-list .item .meta .itemid {
+    display: none;
+    position: absolute;
+    font-size: 12px;
+    bottom: 0;
+    left: 0;
+}
+
+.list .item-list .item .meta h2 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.list .item-list .item .meta .price {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.list .item-list .item .meta .cart-action {
+    display: block;
+    text-align: right;
+    width: 100%;
+}
+
+.list .item .meta .cart-action.alter {
+    display: block;
+    text-align: right;
+}
+
+.list .item-list .item .meta .cart-action .product-quantity {
+    width: 32px;
+    box-sizing: content-box;
+    padding: 6px;
+    border-radius: 3px;
+    border: 0;
+    text-align: center;
+}
+
+.list .item-list .item .meta .cart-action .btnAddAction,
+.list .item-list .item .meta .cart-action .opt button {
+    width: 30px;
+    border: 0;
+    padding: 6px;
+    border-radius: 3px;
+    background: #e9b328;
+    color: #111111;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.list .item-list .item .meta .cart-action .btnAddAction.init {
+    width: auto;
+    padding: 6px 10px;
+}
+
+.list .item-list .item .meta .cart-action .opt {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.list .item-list .item .meta .cart-action .opt .btnAddAction,
+.list .item-list .item .meta .cart-action .opt .qty {
+    width: 30px;
+    text-align: center;
+}
+
+.cart-summary-badge {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    padding: 10px;
+    background-color: #e9b328;
+    color: #111111;
+    z-index: 9;
+}
+
+.btn.focus,
+.btn:focus,
+.btn:hover {
+    color: #e9b328;
+}
+
+.cart-summary-badge button {
+    display: inline-block;
+    border: 0;
+    padding: 6px;
+    border-radius: 3px;
+    background: #111111;
+    color: #e9b328;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.cart-summary-badge button:hover {
+    background: #111111;
+    color: #e9b328;
+}
+
+.cart-summary-badge .continue {
+    position: relative;
+    width: 30%;
+    float: left;
+    margin: 5px;
+}
+
+.cart-bottom-bar {
+    font-size: 24px;
+    display: inline-block;
+    width: 55%;
+}
+
+.cart-summary-badge .btn {
+    display: block;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+}
+
+.cart-summary-badge .btn.toggle-back {
+    display: none;
+}
+
+.cart-summary-badge .btn.toggle-back.active {
+    display: block;
+}
+
+.cart-summary-review {
+    position: relative;
+}
+
+.tbl-cart {
+    width: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 100px;
+}
+
+#checkout-table.tbl-cart {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#orderDetails.tbl-cart {
+    padding-bottom: 0;
+}
+
+.tbl-cart .cart-item {
+    padding-bottom: 15px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tbl-cart .cart-item:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+}
+
+.tbl-cart .cart-item>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid;
+}
+
+.tbl-cart .cart-item>div.cart-trow .pname {
+    font-size: 21px;
+}
+
+.tbl-cart .cart-item>div.cart-trow .pname.alt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tbl-cart .cart-item>div.cart-trow .popt {
+    color: #8e8d8a;
+}
+
+.tbl-cart .cart-item>div.cart-brow {
+    border-top: 0;
+}
+.tbl-cart .cart-item>div.cart-brow .pcode{
+    width: 33.33%;
+}
+
+#checkout-table.tbl-cart tr:last-child>td {
+    padding: 10px 5px;
+    border: 1px solid;
+}
+
+#checkout-table.tbl-cart .cart-item>div.cart-brow {
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.tbl-cart .cart-item .cart-brow .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.tbl-cart .cart-item .cart-brow .input-group.alt {
+    justify-content: flex-end;
+}
+
+.tbl-cart .cart-item .cart-brow .input-group .opt {
+    display: flex;
+    align-items: center;
+}
+
+.tbl-cart .cart-item .cart-brow .input-group .qty {
+    border: 0;
+    width: 40px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.tbl-cart .cart-item .cart-brow .input-group button {
+    border: 0;
+    width: 35px;
+    padding: 8px;
+    border-radius: 3px;
+    background: #e9b328;
+    color: #111111;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid;
+    font-size: 18px;
+    font-weight: 600
+}
+
+.cart-summary .ftotal {
+    color: #111111;
+    background-color: #e9b328;
+    padding: 10px 15px;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.cart-summary .noitems {
+    padding: 0 15px;
+}
+
+.addmore {
+    margin-top: 40px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.login-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.login-user span {
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+#myModal {
+    background-color: #111111;
+}
+
+#myModal .modal-dialog {
+    background-color: #111111;
+    border: 1px solid #d3d3d3;
+    align-items: flex-start;
+}
+
+#myModal .modal-content {
+    background-color: transparent;
+    border: 0;
+}
+
+#myModal .modal-content .modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#myModal .modal-content .modal-header .modal-title {
+    font-size: 24px;
+    width: 80%;
+}
+
+#myModal .modal-header:after {
+    width: 4px;
+    height: 55px;
+    background-color: #e9b328;
+}
+
+#myModal .modal-content .modal-header .btn-close {
+    color: #111111;
+    opacity: 1;
+    background-color: #e9b328;
+    text-shadow: none;
+    padding: 4px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin: 0;
+}
+
+.token-num {
+    margin: 0 auto 20px;
+    border: 5px solid #e9b328;
+    border-radius: 20px;
+    padding: 10px;
+    max-width: 200px;
+}
+
+.token-num>div {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e9b328;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.token-num span.num {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    text-align: center;
+    font-size: 45px;
+    font-weight: 700;
+    color: #111111;
+    background-color: #e9b328;
+    border-radius: 10px;
+}
+
+.cart-summary-review .tbl-cart .btn,
+.addmore .btn,
+#myModal .modal-footer .btn {
+    font-size: 21px;
+    display: inline-block;
+    border: 0;
+    padding: 6px 15px;
+    border-radius: 3px;
+    background: #e9b328;
+    color: #111111;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#orders-tab .nav-link {
+    font-size: 21px;
+}
+
+#orders-tab .nav-link {
+    color: #e9b328;
+}
+
+#orders-tab .nav-link.active {
+    color: #ffffff;
+    background-color: #e9b328;
+}
+
+#orders-tabContent .table {
+    font-size: 21px;
+}
+
+#orders-tabContent .table thead th,
+#orders-tabContent .table tbody th>a {
+    color: #e9b328;
+}
+
+#orders-tabContent .table tbody th>a.tokennum {
+    padding: 6px 12px;
+    background: #e9b328;
+    border-radius: 4px;
+    color: #111111;
+}
+
+.tbl-cart .cart-item>div.cart-brow .pname .pid {
+    padding: 6px 12px;
+    background: #e9b328;
+    border-radius: 4px;
+    color: #111111;
+    margin-right: 10px
+}
+
+#orders-tabContent .table tbody th,
+#orders-tabContent .table tbody td {
+    color: #ffffff;
+}
