@@ -11,6 +11,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const cart = useSelector((state) => state.cart.cart);
   const token = useSelector((state) => state.auth.token);
   const decodedToken = decodeToken(token);
   const user_id = decodedToken?.user_id;
@@ -53,7 +54,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   return (
-    <div className={`site ${isLoggedIn && 'inner'}`}>
+    <div className={`site ${isLoggedIn && 'inner'} ${cart.length > 0 && 'cart'}`}>
       <header className="site-header">
         <div className="site-branding">
           <a href="/"><img src="Logo.png" alt="Dosa Filling Centre" /></a>

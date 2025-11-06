@@ -267,6 +267,11 @@ a {
     text-decoration: none;
 }
 
+.h4,
+h4 {
+    font-size: 16px;
+}
+
 .site {
     padding: 15px;
 }
@@ -277,6 +282,9 @@ a {
     flex-direction: column;
     justify-content: center;
     align-items: stretch;
+}
+.site.cart {
+    padding-bottom: 72px;
 }
 
 .site-header>div.site-branding {
@@ -314,7 +322,7 @@ a {
     font-size: 20px;
 }
 
-.form-control:disabled{
+.form-control:disabled {
     background-color: transparent;
     opacity: 0.75;
 }
@@ -367,7 +375,6 @@ a {
     text-align: center;
     border: 2px solid #e9b328;
     color: #e9b328;
-    font-size: 18px;
     font-weight: 700;
     padding: 10px 15px;
     border-radius: 5px;
@@ -423,7 +430,6 @@ form.list button {
     border: 2px solid #e9b328;
     background-color: #e9b328;
     color: #111111;
-    font-size: 18px;
     font-weight: 700;
     padding: 6px 11px;
     border-radius: 5px;
@@ -504,18 +510,28 @@ form.list button:hover {
 }
 
 .list .item-list .item {
-    display: flex;
-    width: 100%;
-    gap: 20px;
-    align-items: flex-start;
-    justify-content: space-between;
+    position: relative;
     padding: 15px 0;
     margin-bottom: 0;
     border-bottom: 1px dashed #d3d3d3;
 }
 
+.list .item-list .item h2 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.list .item-list .item-inner {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
 .list .item-list .item .img {
-    width: 80px;
+    width: 60px;
     border: 1px solid #e9b328;
     background-color: #e9b328;
     border-radius: 5px;
@@ -525,13 +541,19 @@ form.list button:hover {
 
 .list .item-list .item .meta {
     position: relative;
-    width: calc(100% - 80px);
+    width: calc(100% - 60px);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
 }
 
+.list .item-list .item .meta .meta-inner{
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
 
 .list .item-list .item .meta .meta-info {
     width: calc(100% - 100px)
@@ -545,16 +567,9 @@ form.list button:hover {
     left: 0;
 }
 
-.list .item-list .item .meta h2 {
-    font-size: 16px;
-    margin-top: 0;
-    margin-bottom: 8px;
-}
-
 .list .item-list .item .meta .price {
     font-size: 20px;
     font-weight: 700;
-    margin-bottom: 5px;
 }
 
 .list .item-list .item .meta .cart-action {
@@ -614,7 +629,7 @@ form.list button:hover {
     bottom: 0;
     width: 100%;
     left: 0;
-    padding: 10px;
+    padding: 5px 10px;
     background-color: #e9b328;
     color: #111111;
     z-index: 9;
@@ -710,15 +725,12 @@ form.list button:hover {
     border: 1px solid;
 }
 
-.tbl-cart .cart-item>div.cart-trow .pname {
-    font-size: 21px;
-}
-
 .tbl-cart .cart-item>div.cart-trow .pname.alt {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
 
 .tbl-cart .cart-item>div.cart-trow .popt {
     color: #8e8d8a;
@@ -727,7 +739,8 @@ form.list button:hover {
 .tbl-cart .cart-item>div.cart-brow {
     border-top: 0;
 }
-.tbl-cart .cart-item>div.cart-brow .pcode{
+
+.tbl-cart .cart-item>div.cart-brow .pcode {
     width: 33.33%;
 }
 

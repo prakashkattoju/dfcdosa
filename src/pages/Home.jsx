@@ -113,29 +113,35 @@ export default function Home() {
                         {((searchResults.length > 0 || notFound) && activeCategory === "") && <span className='clear-search' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
                     </div>
                 </div>
-                { loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <div className="list">
+                {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <div className="list">
                     {activeCategory !== "" && <div className="item-category active">
                         <span><span>{activeCategory}</span><span className='clear-search' onClick={clearCategorySearch}><i className="fa-solid fa-xmark"></i></span></span>
                     </div>}
                     {searchResults.length > 0 ? <div className="item-list">{
                         searchResults.map((item, index) => <div key={index} className="item">
-                            <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div>
-                            <div className="meta">
-                                <h2>{item.title}</h2>
-                                <div className="price">{priceDisplay(parseInt(item.price))}</div>
-                                <span className="itemid"># {item.product_code}</span>
-                                <div className="cart-action">
-                                    {checkForAdd(parseInt(item.product_code)) ?
-                                        (<div className="opt">
-                                            <button className="minus" onClick={() => decrement(parseInt(item.product_code))}><i className="fa-solid fa-minus"></i></button>
-                                            <div className="qty">{getQuantity(parseInt(item.product_code))}</div>
-                                            <button className="plus" onClick={() => increment(parseInt(item.product_code))}><i className="fa-solid fa-plus"></i></button>
-                                        </div>) :
-                                        <button className="btnAddAction init" onClick={() => addOptToCart({
-                                            'product_code': parseInt(item.product_code),
-                                            'title': item.title,
-                                            'price': parseInt(item.price),
-                                        })}>Add <i className="fa-solid fa-plus"></i></button>}
+                            <div className='item-inner'>
+                                <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div>
+                                <div className="meta">
+                                    <h2>{item.title}</h2>
+                                    <div className="meta-inner">
+                                        <div className="meta-info">
+                                            <div className="price">{priceDisplay(parseInt(item.price))}</div>
+                                            <span className="itemid"># {item.product_code}</span>
+                                        </div>
+                                        <div className="cart-action">
+                                            {checkForAdd(parseInt(item.product_code)) ?
+                                                (<div className="opt">
+                                                    <button className="minus" onClick={() => decrement(parseInt(item.product_code))}><i className="fa-solid fa-minus"></i></button>
+                                                    <div className="qty">{getQuantity(parseInt(item.product_code))}</div>
+                                                    <button className="plus" onClick={() => increment(parseInt(item.product_code))}><i className="fa-solid fa-plus"></i></button>
+                                                </div>) :
+                                                <button className="btnAddAction init" onClick={() => addOptToCart({
+                                                    'product_code': parseInt(item.product_code),
+                                                    'title': item.title,
+                                                    'price': parseInt(item.price),
+                                                })}>Add <i className="fa-solid fa-plus"></i></button>}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>)
