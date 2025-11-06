@@ -251,7 +251,7 @@ html {
 /* Elements
 --------------------------------------------- */
 body {
-    background: #111111;
+    background: #252525;
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 400;
@@ -429,7 +429,7 @@ form.list button {
     text-align: center;
     border: 2px solid #e9b328;
     background-color: #e9b328;
-    color: #111111;
+    color: #252525;
     font-weight: 700;
     padding: 6px 11px;
     border-radius: 5px;
@@ -438,12 +438,12 @@ form.list button {
 
 form.list button:hover {
     background-color: #e9b328;
-    color: #111111;
+    color: #252525;
 }
 
 .list .item-category.active {
     background-color: #e9b328;
-    color: #111111;
+    color: #252525;
 }
 
 .list .item-category>span {
@@ -516,10 +516,14 @@ form.list button:hover {
     border-bottom: 1px dashed #d3d3d3;
 }
 
+.list .item-list .item:first-child{
+    padding-top: 0;
+}
+
 .list .item-list .item h2 {
     font-size: 16px;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .list .item-list .item-inner {
@@ -599,7 +603,7 @@ form.list button:hover {
     padding: 6px;
     border-radius: 3px;
     background: #e9b328;
-    color: #111111;
+    color: #252525;
     font-weight: 400;
     cursor: pointer;
 }
@@ -631,7 +635,7 @@ form.list button:hover {
     left: 0;
     padding: 5px 10px;
     background-color: #e9b328;
-    color: #111111;
+    color: #252525;
     z-index: 9;
 }
 
@@ -646,14 +650,14 @@ form.list button:hover {
     border: 0;
     padding: 6px;
     border-radius: 3px;
-    background: #111111;
+    background: #252525;
     color: #e9b328;
     font-weight: 400;
     cursor: pointer;
 }
 
 .cart-summary-badge button:hover {
-    background: #111111;
+    background: #252525;
     color: #e9b328;
 }
 
@@ -785,7 +789,7 @@ form.list button:hover {
     padding: 8px;
     border-radius: 3px;
     background: #e9b328;
-    color: #111111;
+    color: #252525;
     font-weight: 400;
     cursor: pointer;
 }
@@ -800,7 +804,7 @@ form.list button:hover {
 }
 
 .cart-summary .ftotal {
-    color: #111111;
+    color: #252525;
     background-color: #e9b328;
     padding: 10px 15px;
     font-size: 25px;
@@ -833,11 +837,11 @@ form.list button:hover {
 }
 
 #myModal {
-    background-color: #111111;
+    background-color: #252525;
 }
 
 #myModal .modal-dialog {
-    background-color: #111111;
+    background-color: #252525;
     border: 1px solid #d3d3d3;
     align-items: flex-start;
 }
@@ -868,7 +872,7 @@ form.list button:hover {
 }
 
 #myModal .modal-content .modal-header .btn-close {
-    color: #111111;
+    color: #252525;
     opacity: 1;
     background-color: #e9b328;
     text-shadow: none;
@@ -902,7 +906,7 @@ form.list button:hover {
     text-align: center;
     font-size: 45px;
     font-weight: 700;
-    color: #111111;
+    color: #252525;
     background-color: #e9b328;
     border-radius: 10px;
 }
@@ -916,7 +920,7 @@ form.list button:hover {
     padding: 6px 15px;
     border-radius: 3px;
     background: #e9b328;
-    color: #111111;
+    color: #252525;
     font-weight: 500;
     cursor: pointer;
 }
@@ -947,14 +951,14 @@ form.list button:hover {
     padding: 6px 12px;
     background: #e9b328;
     border-radius: 4px;
-    color: #111111;
+    color: #252525;
 }
 
 .tbl-cart .cart-item>div.cart-brow .pname .pid {
     padding: 6px 12px;
     background: #e9b328;
     border-radius: 4px;
-    color: #111111;
+    color: #252525;
     margin-right: 10px
 }
 
