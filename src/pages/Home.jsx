@@ -28,7 +28,10 @@ export default function Home() {
             const records = rows.slice(1).map((r) =>
                 Object.fromEntries(r.map((v, i) => [headers[i], v]))
             );
-            setProducts(records);
+            const statusData = records.filter((item) => {
+                return item.status === "YES";
+            });
+            setProducts(statusData);
         } catch (error) {
             console.error("Failed to fetch user:", error);
         } finally {
@@ -80,19 +83,22 @@ export default function Home() {
     }
 
     const clearSearch = () => {
-        setSearchResults([])
+        if(activeCategory === ""){
+            setSearchResults([])
+            setNotFound(false)
+        }
         setQueryString('')
-        setActiveCategory('')
-        setNotFound(false)
     }
 
     const clearCategorySearch = () => {
-        setSearchResults([])
+        if(queryString === ""){
+            setSearchResults([])
+            setNotFound(false)
+        }
         setActiveCategory('')
-        setNotFound(false)
     }
 
-    //console.log("searchResults", searchResults)
+    console.log("searchResults", searchResults)
 
     const checkForAdd = (product_code) => {
         const found = cart.some(el => el.product_code === product_code);
