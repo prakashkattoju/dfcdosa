@@ -40,17 +40,33 @@ export default function Home() {
         fetchproducts();
     }, [fetchproducts]);
 
+    //console.log("products", products)
+
     const categories = [...new Set(products.map(item => item.category))];
 
     const setSearchResultsFunc = (text) => {
         if (text === '') {
-            setSearchResults([])
-            setNotFound(false)
+            if (activeCategory === "") {
+                setSearchResults([])
+                setNotFound(false)
+            } else {
+                const filteredData = products.filter((item) => {
+                    return item.category.toLowerCase().includes(activeCategory.toLowerCase());
+                });
+                filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+            }
         } else {
-            const filteredData = products.filter((item) => {
-                return item.title.toLowerCase().includes(text.toLowerCase());
-            });
-            filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+            if (activeCategory === "") {
+                const filteredData = products.filter((item) => {
+                    return item.title.toLowerCase().includes(text.toLowerCase());
+                });
+                filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+            } else {
+                const filteredData = searchResults.filter((item) => {
+                    return item.title.toLowerCase().includes(text.toLowerCase());
+                });
+                filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+            }
         }
         setQueryString(text)
     }
@@ -66,6 +82,7 @@ export default function Home() {
     const clearSearch = () => {
         setSearchResults([])
         setQueryString('')
+        setActiveCategory('')
         setNotFound(false)
     }
 
@@ -75,7 +92,7 @@ export default function Home() {
         setNotFound(false)
     }
 
-    console.log("searchResults", searchResults)
+    //console.log("searchResults", searchResults)
 
     const checkForAdd = (product_code) => {
         const found = cart.some(el => el.product_code === product_code);
@@ -110,7 +127,7 @@ export default function Home() {
                 <div className="search-form">
                     <div className="form-group">
                         <input className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
-                        {((searchResults.length > 0 || notFound) && activeCategory === "") && <span className='clear-search' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
+                        {((searchResults.length > 0 || notFound) && queryString !== "") && <span className='clear-search' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
                     </div>
                 </div>
                 {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <div className="list">

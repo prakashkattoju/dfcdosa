@@ -521,7 +521,7 @@ form.list button:hover {
 }
 
 .list .item-list .item h2 {
-    font-size: 16px;
+    font-size: 14px;
     margin-top: 0;
     margin-bottom: 5px;
 }
@@ -713,6 +713,9 @@ form.list button:hover {
     padding-bottom: 15px;
     font-size: 16px;
     font-weight: 600;
+}
+.tbl-cart .cart-item .pname{
+    font-size: 14px;
 }
 
 .tbl-cart .cart-item:last-child {
@@ -914,7 +917,7 @@ form.list button:hover {
 .cart-summary-review .tbl-cart .btn,
 .addmore .btn,
 #myModal .modal-footer .btn {
-    font-size: 21px;
+    font-size: 18px;
     display: inline-block;
     border: 0;
     padding: 6px 15px;

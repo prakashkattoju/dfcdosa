@@ -71,10 +71,10 @@ export default function Cart() {
                                 </div>
                             </div>)}
                         </div>
-                        <div className="cart-summary">
+                        {/* <div className="cart-summary">
                             <div className="noitems">No. Items: {getCartQuantity()}</div>
-                            <div className="ftotal">{getCartAmount()}</div>
-                        </div>
+                            <div className="ftotal">{getCartAmount()}</div> 
+                        </div> */}
                         <div className="addmore"><p>If you want add more items.</p><button type="button" className="btn toggle" onClick={() => navigate("/", { replace: true })}>Add More</button></div>
                     </div>
                 </div> :
