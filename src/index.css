@@ -667,6 +667,7 @@ form.list button:hover {
     padding: 5px 10px;
     background-color: #e9b328;
     color: #252525;
+    border-top: 2px solid;
     z-index: 9;
 }
 
