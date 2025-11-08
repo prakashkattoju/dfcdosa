@@ -550,7 +550,7 @@ form.list button:hover {
 .list .item-list .item h2 {
     font-size: 14px;
     margin-top: 0;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .list .item-list .item-inner {
@@ -577,6 +577,10 @@ form.list button:hover {
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
+}
+
+.dashboard .list .item-list .item .meta{
+    width: calc(100% - 30px);
 }
 
 .list .item-list .item .meta .meta-inner {
@@ -634,6 +638,13 @@ form.list button:hover {
     font-weight: 400;
     cursor: pointer;
 }
+.list .item-list .item .meta .cart-action .opt button.edit {
+    background: transparent;
+    color: #e9b328;
+    padding: 0;
+    font-size: 25px;
+}
+
 
 .list .item-list .item .meta .cart-action .btnAddAction.init {
     width: auto;
@@ -909,6 +920,9 @@ form.list button:hover {
     flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
+}
+#myModal .modal-content .modal-footer{
+    border-top-color: #9a7414;
 }
 
 #myModal .modal-content .modal-header .modal-title {

@@ -3,6 +3,7 @@ import { GetProducts, GetCategories, ChangeProductStatus } from '../services/Pro
 import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -15,6 +16,11 @@ export default function Dashboard() {
   const [notFound, setNotFound] = useState(false);
   const [queryString, setQueryString] = useState('');
   const [activeCategory, setActiveCategory] = useState(null);
+  const [showConfirm, setShowConfirm] = useState({
+    id: null,
+    title: null,
+    show: false
+  });
 
   const fetchproducts = useCallback(async () => {
     try {
@@ -64,6 +70,7 @@ export default function Dashboard() {
       console.error("Failed to change status:", error);
     }
   }
+
 
   const setSearchResultsFunc = (text) => {
     if (text === '') {
@@ -127,6 +134,32 @@ export default function Dashboard() {
     return value === "1" || value === 1 || value === true;
   };
 
+  const handleDeleteClick = (product_id, title) => {
+    setShowConfirm({
+      id: product_id,
+      title: title,
+      show: true
+    });
+  };
+
+  const handleConfirmDelete = (id) => {
+    document.activeElement?.blur();
+    setShowConfirm({
+      id: null,
+      title: null,
+      show: false
+    });
+  };
+
+  const handleCancel = () => {
+    document.activeElement?.blur();
+    setShowConfirm({
+      id: null,
+      title: null,
+      show: false
+    });
+  };
+
   return (
     <div className="menu-items">
       <div className="search-form">
@@ -143,7 +176,8 @@ export default function Dashboard() {
           {searchResults.length > 0 ? <div className="item-list">{
             searchResults.map((item, index) => <div key={index} className="item">
               <div className='item-inner'>
-                <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div>
+                {/* <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div> */}
+                <div className='itemid'>{item.product_id}</div>
                 <div className="meta">
                   <h2>{item.title}</h2>
                   <div className="meta-inner">
@@ -163,6 +197,7 @@ export default function Dashboard() {
                           <span className="label-text">{toBoolean(item.status) ? "YES" : "NO"}</span>
                         </label>
                         <button className="edit"><i className="fa-solid fa-pen-to-square"></i></button>
+                        <button className="edit" onClick={() => handleDeleteClick(item.product_id, item.title)}><i className="fa-solid fa-trash"></i></button>
                       </div>
                     </div>
                   </div>
@@ -173,6 +208,13 @@ export default function Dashboard() {
           </div>) : <p className='text-center'>No Dosa Categories</p>
           }
         </div></>}
+      <ConfirmModal
+        show={showConfirm.show}
+        title="Delete Confirmation"
+        message={`Are you sure you want to delete "${showConfirm.title}"?`}
+        onConfirm={() => handleConfirmDelete(showConfirm.id)}
+        onCancel={handleCancel}
+      />
     </div>
   )
 }

@@ -79,7 +79,7 @@ const AdminProtectedRoute = ({ children }) => {
                 aria-hidden="true"
                 ref={modalRef}
             >
-                <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
                             <button
