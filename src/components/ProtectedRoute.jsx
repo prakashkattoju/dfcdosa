@@ -15,6 +15,7 @@ const ProtectedRoute = ({ children }) => {
   const token = useSelector((state) => state.auth.token);
   const decodedToken = decodeToken(token);
   const user_id = decodedToken?.user_id;
+  const user_role = decodedToken?.user_role;
 
   const [isConfirmOpen, setConfirmOpen] = useState(false)
   const [open, setOpen] = useState(false);

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { verifyUser } from "../services/Authservices";
+import { verifyAdmin } from "../services/Authservices";
 import { setCredentials } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 import { FaSpinner } from "react-icons/fa";
 
-export default function Login() {
+export default function AdminLogin() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,22 +18,21 @@ export default function Login() {
   const formik = useFormik({
     initialValues: {
       uname: "",
-      mobile: ""
+      password: ""
     },
     validationSchema: Yup.object({
       uname: Yup.string()
-        .required("Name is required"),
-      mobile: Yup.string()
-        .required("Mobile Number is required")
-        .matches(/^[0-9]{10}$/, 'Invalid Mobile (10 digits)'),
+        .required("User Name is required"),
+      password: Yup.string()
+        .required("Password is required")
     }),
     onSubmit: async (values) => {
       try {
         setLoading(true)
-        const data = await verifyUser(values.uname, values.mobile);
+        const data = await verifyAdmin(values.uname, values.password);
         if (data.status) {
           dispatch(setCredentials(data));
-          navigate("/", { replace: true });
+          navigate("/dashboard", { replace: true });
           window.location.reload(true);
         }
       } catch (error) {
@@ -60,7 +59,7 @@ export default function Login() {
                   <input
                     type="text"
                     name="uname"
-                    placeholder="Enter your name"
+                    placeholder="Enter your username"
                     value={formik.values.uname}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -72,16 +71,16 @@ export default function Login() {
                 </div>
                 <div className="form-group">
                   <input
-                    type="text"
-                    name="mobile"
-                    placeholder="Enter your mobile number"
-                    value={formik.values.mobile}
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    value={formik.values.password}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     className="form-control"
                   />
-                  {formik.touched.mobile && formik.errors.mobile ? (
-                    <div className="input-error">{formik.errors.mobile}</div>
+                  {formik.touched.password && formik.errors.password ? (
+                    <div className="input-error">{formik.errors.password}</div>
                   ) : null}
                 </div>
                 <div className="form-group">

@@ -1,9 +1,8 @@
 import { useEffect, useState, useCallback } from 'react'
-import { GetProducts } from '../services/Productsservices';
+import { GetProducts, GetCategories } from '../services/Productsservices';
 import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, incrementQuantity, decrementQuantity, removeFromCart } from '../store/cartSlice';
-import { decodeToken } from 'react-jwt';
+import { addToCart, incrementQuantity, decrementQuantity } from '../store/cartSlice';
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
@@ -13,27 +12,32 @@ export default function Home() {
     const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [notFound, setNotFound] = useState(false);
     const [queryString, setQueryString] = useState('');
-    const [activeCategory, setActiveCategory] = useState('');
+    const [activeCategory, setActiveCategory] = useState(null);
 
     const fetchproducts = useCallback(async () => {
-        setLoading(true)
         try {
             const productsdata = await GetProducts();
-            const rows = productsdata.split("\n").map((row) => row.split(","));
-            const headers = rows[0];
-            const records = rows.slice(1).map((r) =>
-                Object.fromEntries(r.map((v, i) => [headers[i], v]))
-            );
-            const statusData = records.filter((item) => {
-                return item.status === "YES";
+            const statusData = productsdata.filter((item) => {
+                return item.status == 1;
             });
             setProducts(statusData);
         } catch (error) {
-            console.error("Failed to fetch user:", error);
+            console.error("Failed to fetch products:", error);
+        }
+    }, []);
+
+    const fetchcategories = useCallback(async () => {
+        setLoading(true)
+        try {
+            const categoriesdata = await GetCategories();
+            setCategories(categoriesdata);
+        } catch (error) {
+            console.error("Failed to fetch categories:", error);
         } finally {
             setLoading(false)
         }
@@ -41,25 +45,24 @@ export default function Home() {
 
     useEffect(() => {
         fetchproducts();
-    }, [fetchproducts]);
+        fetchcategories();
+    }, [fetchproducts, fetchcategories]);
 
-    //console.log("products", products)
-
-    const categories = [...new Set(products.map(item => item.category))];
+    //console.log("categories", categories)
 
     const setSearchResultsFunc = (text) => {
         if (text === '') {
-            if (activeCategory === "") {
+            if (activeCategory === null) {
                 setSearchResults([])
                 setNotFound(false)
             } else {
                 const filteredData = products.filter((item) => {
-                    return item.category.toLowerCase().includes(activeCategory.toLowerCase());
+                    return item.category_id === activeCategory;
                 });
                 filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
             }
         } else {
-            if (activeCategory === "") {
+            if (activeCategory === null) {
                 const filteredData = products.filter((item) => {
                     return item.title.toLowerCase().includes(text.toLowerCase());
                 });
@@ -74,16 +77,16 @@ export default function Home() {
         setQueryString(text)
     }
 
-    const setCategoryResultsFunc = (text) => {
+    const setCategoryResultsFunc = (category_id) => {
         const filteredData = products.filter((item) => {
-            return item.category.toLowerCase().includes(text.toLowerCase());
+            return item.category_id === category_id;
         });
         filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
-        filteredData.length > 0 && setActiveCategory(text)
+        filteredData.length > 0 && setActiveCategory(category_id)
     }
 
     const clearSearch = () => {
-        if(activeCategory === ""){
+        if(activeCategory === null){
             setSearchResults([])
             setNotFound(false)
         }
@@ -95,17 +98,22 @@ export default function Home() {
             setSearchResults([])
             setNotFound(false)
         }
-        setActiveCategory('')
+        setActiveCategory(null)
     }
 
-    console.log("searchResults", searchResults)
+    //console.log("searchResults", searchResults)
 
-    const checkForAdd = (product_code) => {
-        const found = cart.some(el => el.product_code === product_code);
+    const getCategoryTitle = (activeCategory) => {
+        const category = categories.find(el => el.category_id == activeCategory);
+        return category.title;
+    }
+
+    const checkForAdd = (product_id) => {
+        const found = cart.some(el => el.product_id === product_id);
         return found;
     }
-    const getQuantity = (product_code) => {
-        const qty = cart.find((el) => el.product_code === product_code);
+    const getQuantity = (product_id) => {
+        const qty = cart.find((el) => el.product_id === product_id);
         return qty.quantity;
     }
 
@@ -114,17 +122,17 @@ export default function Home() {
     };
 
     const getCartAmount = () => {
-        return priceDisplay(cart.reduce((total, item) => total + item.price * item.quantity, 0));
+        return priceDisplay(cart.reduce((total, item) => total + item.unit_price * item.quantity, 0));
     }
 
     const addOptToCart = (opt) => {
         dispatch(addToCart(opt));
     }
-    const decrement = (product_code) => {
-        dispatch(decrementQuantity(product_code));
+    const decrement = (product_id) => {
+        dispatch(decrementQuantity(product_id));
     }
-    const increment = (product_code) => {
-        dispatch(incrementQuantity(product_code));
+    const increment = (product_id) => {
+        dispatch(incrementQuantity(product_id));
     }
 
     return (
@@ -136,11 +144,11 @@ export default function Home() {
                         {((searchResults.length > 0 || notFound) && queryString !== "") && <span className='clear-search' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
                     </div>
                 </div>
-                {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <div className="list">
-                    {activeCategory !== "" && <div className="item-category active">
-                        <span><span>{activeCategory}</span><span className='clear-search' onClick={clearCategorySearch}><i className="fa-solid fa-xmark"></i></span></span>
-                    </div>}
-                    {searchResults.length > 0 ? <div className="item-list">{
+                {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <>
+                    {activeCategory !== null && <div className="list sticky"><div className="item-category active">
+                        <span><span>{getCategoryTitle(activeCategory)}</span><span className='clear-search' onClick={clearCategorySearch}><i className="fa-solid fa-xmark"></i></span></span>
+                    </div></div>}
+                    <div className="list">{searchResults.length > 0 ? <div className="item-list">{
                         searchResults.map((item, index) => <div key={index} className="item">
                             <div className='item-inner'>
                                 <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div>
@@ -148,30 +156,30 @@ export default function Home() {
                                     <h2>{item.title}</h2>
                                     <div className="meta-inner">
                                         <div className="meta-info">
-                                            <div className="price">{priceDisplay(parseInt(item.price))}</div>
-                                            <span className="itemid"># {item.product_code}</span>
+                                            <div className="price">{priceDisplay(parseInt(item.unit_price))}</div>
+                                            <span className="itemid"># {item.product_id}</span>
                                         </div>
                                         <div className="cart-action">
-                                            {checkForAdd(parseInt(item.product_code)) ?
+                                            {checkForAdd(parseInt(item.product_id)) ?
                                                 (<div className="opt">
-                                                    <button className="minus" onClick={() => decrement(parseInt(item.product_code))}><i className="fa-solid fa-minus"></i></button>
-                                                    <div className="qty">{getQuantity(parseInt(item.product_code))}</div>
-                                                    <button className="plus" onClick={() => increment(parseInt(item.product_code))}><i className="fa-solid fa-plus"></i></button>
+                                                    <button className="minus" onClick={() => decrement(parseInt(item.product_id))}><i className="fa-solid fa-minus"></i></button>
+                                                    <div className="qty">{getQuantity(parseInt(item.product_id))}</div>
+                                                    <button className="plus" onClick={() => increment(parseInt(item.product_id))}><i className="fa-solid fa-plus"></i></button>
                                                 </div>) :
                                                 <button className="btnAddAction init" onClick={() => addOptToCart({
-                                                    'product_code': parseInt(item.product_code),
+                                                    'product_id': parseInt(item.product_id),
                                                     'title': item.title,
-                                                    'price': parseInt(item.price),
+                                                    'unit_price': parseInt(item.unit_price),
                                                 })}>Add <i className="fa-solid fa-plus"></i></button>}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>)
-                    }</div> : categories.length > 0 ? categories.map((item, index) => <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item)}><span><span>{item}</span><i className="fa-solid fa-chevron-right"></i></span>
+                    }</div> : categories.length > 0 ? categories.map((item, index) => <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
                     </div>) : <p className='text-center'>No Dosa Categories</p>
                     }
-                </div>}
+                </div></>}
             </div>
             {cart.length > 0 && <div className="cart-summary-badge">
                 <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
