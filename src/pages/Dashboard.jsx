@@ -1,9 +1,10 @@
 import { useEffect, useState, useCallback } from 'react'
-import { GetProducts, GetCategories, ChangeProductStatus } from '../services/Productsservices';
+import { GetProducts, GetCategories, ChangeProductStatus, DeleteProductByID } from '../services/Productsservices';
 import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from '../components/ConfirmModal';
+import AlertModal from '../components/AlertModal';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -19,6 +20,12 @@ export default function Dashboard() {
   const [showConfirm, setShowConfirm] = useState({
     id: null,
     title: null,
+    show: false
+  });
+
+  const [showAlert, setShowAlert] = useState({
+    title: null,
+    message: null,
     show: false
   });
 
@@ -142,14 +149,33 @@ export default function Dashboard() {
     });
   };
 
-  const handleConfirmDelete = (id) => {
-    document.activeElement?.blur();
-    setShowConfirm({
-      id: null,
-      title: null,
-      show: false
-    });
-  };
+  const handleConfirmDelete = async (product_id) => {
+    try {
+      const data = await DeleteProductByID(product_id);
+      if (data.status) {
+        document.activeElement?.blur();
+        setShowConfirm({
+          id: null,
+          title: null,
+          show: false
+        });
+        setShowAlert({
+          title: 'Deleted!',
+          message: data.message,
+          show: true
+        })
+      }
+    } catch (error) {
+      console.error(error.message || "An error occurred.")
+    } finally {
+      document.activeElement?.blur();
+      setShowConfirm({
+        id: null,
+        title: null,
+        show: false
+      });
+    }
+  }
 
   const handleCancel = () => {
     document.activeElement?.blur();
@@ -214,6 +240,19 @@ export default function Dashboard() {
         message={`Are you sure you want to delete "${showConfirm.title}"?`}
         onConfirm={() => handleConfirmDelete(showConfirm.id)}
         onCancel={handleCancel}
+      />
+      <AlertModal
+        show={showAlert.show}
+        title={showAlert.title}
+        message={showAlert.message || `Product deleted successfully`}
+        onClose={() => {
+          setShowAlert({
+            title: null,
+            message: null,
+            show: false
+          })
+          window.location.reload(true);
+        }}
       />
     </div>
   )

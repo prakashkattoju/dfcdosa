@@ -123,8 +123,8 @@ export default function Cart() {
                 </div>
             }
             <div
-                className="modal fade"
-                id="myModal"
+                className="dfc-modal modal fade"
+                id="cartModal"
                 tabIndex="-1"
                 aria-hidden="true"
                 ref={modalRef}

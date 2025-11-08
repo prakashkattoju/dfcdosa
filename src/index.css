@@ -370,9 +370,11 @@ h4 {
     outline: 0;
     box-shadow: 0 0 0 .25rem rgba(233, 179, 40, .25);
 }
-.menu-items{
+
+.menu-items {
     position: relative;
 }
+
 .list {
     position: relative;
     display: flex;
@@ -469,10 +471,12 @@ form.list button:hover {
     margin-top: -15px;
     top: 0;
 }
-.list.sticky .item-category.active{
+
+.list.sticky .item-category.active {
     background-color: #e9b328;
     color: #252525;
 }
+
 .list .item-category>span {
     display: flex;
     align-items: center;
@@ -579,7 +583,7 @@ form.list button:hover {
     justify-content: space-between;
 }
 
-.dashboard .list .item-list .item .meta{
+.dashboard .list .item-list .item .meta {
     width: calc(100% - 30px);
 }
 
@@ -638,11 +642,12 @@ form.list button:hover {
     font-weight: 400;
     cursor: pointer;
 }
+
 .list .item-list .item .meta .cart-action .opt button.edit {
     background: transparent;
     color: #e9b328;
     padding: 0;
-    font-size: 25px;
+    font-size: 21px;
 }
 
 
@@ -736,7 +741,8 @@ form.list button:hover {
 .cart-summary-review {
     position: relative;
 }
-.cart-summary-review.removed{
+
+.cart-summary-review.removed {
     text-align: center;
     color: #f00;
     padding: 10px;
@@ -744,7 +750,8 @@ form.list button:hover {
     margin-bottom: 20px;
     border: 1px solid;
 }
-.cart-summary-review.removed h3{
+
+.cart-summary-review.removed h3 {
     font-size: 18px;
 }
 
@@ -898,22 +905,27 @@ form.list button:hover {
     padding: 5px 10px;
 }
 
-#myModal {
-    background-color: #252525;
+.dfc-modal {
+    padding: 15px;
+    background-color: #252525e6;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
-#myModal .modal-dialog {
+.dfc-modal .modal-dialog {
+    width: 100%;
     background-color: #252525;
     border: 1px solid #9a7414;
     align-items: flex-start;
 }
 
-#myModal .modal-content {
+.dfc-modal .modal-content {
     background-color: transparent;
     border: 0;
 }
 
-#myModal .modal-content .modal-header {
+.dfc-modal .modal-content .modal-header {
     padding: 15px;
     border-bottom: 1px solid #9a7414;
     display: flex;
@@ -921,22 +933,23 @@ form.list button:hover {
     align-items: center;
     justify-content: space-between;
 }
-#myModal .modal-content .modal-footer{
+
+.dfc-modal .modal-content .modal-footer {
     border-top-color: #9a7414;
 }
 
-#myModal .modal-content .modal-header .modal-title {
+.dfc-modal .modal-content .modal-header .modal-title {
     font-size: 24px;
     width: 80%;
 }
 
-#myModal .modal-header:after {
+.dfc-modal .modal-header:after {
     width: 4px;
     height: 55px;
     background-color: #e9b328;
 }
 
-#myModal .modal-content .modal-header .btn-close {
+.dfc-modal .modal-content .modal-header .btn-close {
     color: #252525;
     opacity: 1;
     background-color: #e9b328;
@@ -978,7 +991,7 @@ form.list button:hover {
 
 .cart-summary-review .tbl-cart .btn,
 .addmore .btn,
-#myModal .modal-footer .btn {
+.dfc-modal .modal-footer .btn {
     font-size: 18px;
     display: inline-block;
     border: 0;
@@ -1043,14 +1056,14 @@ form.list button:hover {
     display: none;
 }
 
-.switch .label-text{
+.switch .label-text {
     font-weight: 600;
 }
 
 .slider {
     position: relative;
-    width: 50px;
-    height: 30px;
+    width: 45px;
+    height: 25px;
     background-color: #ccc;
     border-radius: 20px;
     cursor: pointer;
@@ -1060,10 +1073,10 @@ form.list button:hover {
 .slider::before {
     content: "";
     position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 24px;
-    height: 24px;
+    top: 2px;
+    left: 2px;
+    width: 21px;
+    height: 21px;
     background: #252525;
     border-radius: 50%;
     transition: 0.3s;

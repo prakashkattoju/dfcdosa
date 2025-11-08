@@ -11,6 +11,9 @@ import { getToken } from './util/Cookies'
 import { checkAndRemoveExpiredToken, fetchUserRole } from "./util/authUtils";
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
+import Categories from "./pages/Categories";
+import Products from "./pages/Products";
+import Orders from "./pages/Orders";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +32,9 @@ function App() {
     <Routes>
       <Route path="/" element={isLoggedIn ? user_role === "admin" ? <AdminProtectedRoute><Dashboard /> </AdminProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <Login />} />
       <Route path="/dashboard" element={isLoggedIn ? user_role === "admin" ? <AdminProtectedRoute><Dashboard /> </AdminProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <AdminLogin />} />
+      <Route path="/dashboard/categories" element={<AdminProtectedRoute><Categories /></AdminProtectedRoute>} />
+      <Route path="/dashboard/products" element={<AdminProtectedRoute><Products /></AdminProtectedRoute>} />
+      <Route path="/dashboard/orders" element={<AdminProtectedRoute><Orders /></AdminProtectedRoute>} />
       <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

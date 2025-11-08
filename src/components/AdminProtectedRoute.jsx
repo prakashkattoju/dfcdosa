@@ -1,11 +1,10 @@
 import { useRef, useEffect } from 'react';
-import { Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../store/userSlice';
 import { decodeToken } from 'react-jwt';
 import { logOut } from '../store/authSlice';
 import { Modal } from "bootstrap";
-import { GetUserByID } from '../services/Userservices';
 
 const AdminProtectedRoute = ({ children }) => {
     const dispatch = useDispatch();
@@ -55,12 +54,30 @@ const AdminProtectedRoute = ({ children }) => {
         return <Navigate to="/dashboard" />;
     }
 
+    const menuNavigation = (page) => {
+        switch (page) {
+            case "categories":
+                navigate('/dashboard/categories')
+                break;
+            case "products":
+                navigate('/dashboard/products')
+                break;
+            case "orders":
+                navigate('/dashboard/orders')
+                break;
+            default:
+                navigate('/dashboard')
+                break;
+        }
+        closeModal()
+    }
+
     return (
         <>
             <div className={`site ${isLoggedIn && 'inner dashboard'}`}>
                 <header className="site-header">
                     <div className="site-branding">
-                        <a href="/"><img src="Logo.png" alt="Dosa Filling Centre" /></a>
+                        <Link to="/dashboard"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
                     </div>
                     <div className="login-user">Hello, {fullname} <span onClick={openModal}><i className="fa-solid fa-bars"></i></span></div>
                 </header>
@@ -73,8 +90,8 @@ const AdminProtectedRoute = ({ children }) => {
                 </main>
             </div>
             <div
-                className="modal fade"
-                id="myModal"
+                className="dfc-modal modal fade"
+                id="menuModal"
                 tabIndex="-1"
                 aria-hidden="true"
                 ref={modalRef}
@@ -93,9 +110,9 @@ const AdminProtectedRoute = ({ children }) => {
                         </div>
                         <div className="modal-body">
                             <div className="list">
-                                <div className="item-category"><span><span>Add Category</span><i className="fa-solid fa-chevron-right"></i></span></div>
-                                <div className="item-category"><span><span>Add Product</span><i className="fa-solid fa-chevron-right"></i></span></div>
-                                <div className="item-category"><span><span>Orders</span><i className="fa-solid fa-chevron-right"></i></span></div>
+                                <div className="item-category" onClick={() => menuNavigation('categories')}><span><span>Add Category</span><i className="fa-solid fa-chevron-right"></i></span></div>
+                                <div className="item-category" onClick={() => menuNavigation('products')}><span><span>Add Product</span><i className="fa-solid fa-chevron-right"></i></span></div>
+                                <div className="item-category" onClick={() => menuNavigation('orders')}><span><span>Orders</span><i className="fa-solid fa-chevron-right"></i></span></div>
                                 <div className="item-category" onClick={logoutAccount}><span><span>Exit</span><i className="fa-solid fa-chevron-right"></i></span></div>
                             </div>
                         </div>
