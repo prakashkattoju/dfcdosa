@@ -13,6 +13,7 @@ export default function AdminLogin() {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   // Formik initialization
   const formik = useFormik({
@@ -36,7 +37,7 @@ export default function AdminLogin() {
           window.location.reload(true);
         }
       } catch (error) {
-        console.error("Error", error)
+        setErrorMsg(error.message)
       } finally {
         setLoading(false)
       }
@@ -85,6 +86,7 @@ export default function AdminLogin() {
                 </div>
                 <div className="form-group">
                   <button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button>
+                  {errorMsg && <div className="input-error text-center mt-2">{errorMsg}</div>}
                 </div>
               </form>
             </div>
