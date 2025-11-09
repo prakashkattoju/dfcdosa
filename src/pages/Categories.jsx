@@ -123,16 +123,27 @@ export default function Categories() {
     },
   });
 
+  const handleEditClick = (item) => {
+    setEditCategory(true)
+    setCategory(item)
+  }
+
+  const handleFormCancel = () => {
+    setCreateCategory(false)
+    setEditCategory(false)
+    setCategory({})
+  }
+
   useEffect(() => {
     if (editCategory && category) {
       const { category_id, category_code, title, image, description, status } = category;
       formik.setValues({
-        category_id: category_id,
-        category_code: category_code,
-        title: title,
-        image: image,
-        description: description,
-        status: status
+        category_id: category_id || '',
+        category_code: category_code || '',
+        title: title || '',
+        image: image || '',
+        description: description || '',
+        status: status || ''
       })
     } else {
       formik.setValues(initialValues)
@@ -192,7 +203,15 @@ export default function Categories() {
 
   return (
     <>
-      {createCategory ? <div className='products'>
+      <div className="list my-3">
+        <div className="item-list">
+          <div className='item d-flex justify-content-between align-items-center'>
+            <h3 className='mb-0'>{createCategory ? 'Create Category' : editCategory ? 'Edit Category' : 'Categories'}</h3>
+            {!createCategory && !editCategory ? <div className='py-2 px-2' onClick={() => setCreateCategory(true)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></div> : <div className='py-2 px-2'>&nbsp;</div>}
+          </div>
+        </div>
+      </div>
+      {(createCategory || editCategory )? <div className='products'>
         <form className="list" onSubmit={formik.handleSubmit}>
           <div className="form-group">
             <input
@@ -256,19 +275,13 @@ export default function Categories() {
           <div className="form-group">
             <div className='row'>
               <div className='col-6'><button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button></div>
-              <div className='col-6'><button type="button" className="btn" onClick={() => setCreateCategory(false)}> Cancel </button></div>
+              <div className='col-6'><button type="button" className="btn" onClick={() => handleFormCancel()}> Cancel </button></div>
             </div>
             {errorMsg && <div className="input-error text-center mt-2">{errorMsg}</div>}
           </div>
         </form>
       </div> :
-        <div className="list mt-3">
-          <div className="item-list">
-            <div className='item d-flex justify-content-between align-items-center'>
-              <h3 className='mb-0'>Categories</h3>
-              <div className='py-2 px-2' onClick={() => setCreateCategory(true)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></div>
-            </div>
-          </div>
+        <div className="list">
           {loading ?
             <p className='text-center'>Loading...</p> :
             categories.length > 0 ?
@@ -281,7 +294,9 @@ export default function Categories() {
                         <h2>{item.title}</h2>
                         <div className="cart-action">
                           <div className="opt status">
-                            <button className="edit"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z" /></svg></button>
+
+                            <button className="edit" onClick={() => handleEditClick(item)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z" /></svg></button>
+
                             <button className="edit" onClick={() => handleDeleteClick(item.category_id, item.title)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" /></svg></button>
                           </div>
                         </div>

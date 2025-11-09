@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { CreateProduct, GetCategories } from '../services/Productsservices';
 import { useSelector } from 'react-redux';
 import { decodeToken } from 'react-jwt';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AlertModal from '../components/AlertModal';
 import { Dropdown } from 'primereact/dropdown';
 import config from '../config';
@@ -12,11 +12,12 @@ import * as Yup from "yup";
 
 export default function Products() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [editProduct, setEditProduct] = useState(false);
-  const [product, setProduct] = useState({});
+  const [editProduct, setEditProduct] = useState(location.state ? true : false);
+  const [product, setProduct] = useState(location.state ? location.state?.product : {});
 
   const [showAlert, setShowAlert] = useState({
     title: null,
@@ -73,7 +74,7 @@ export default function Products() {
     unit_price: '',
     image: '',
     description: '',
-    status: "1"
+    status: ''
   }
   // Formik initialization
   const formik = useFormik({
@@ -135,7 +136,14 @@ export default function Products() {
     }
   }, [product, editProduct])
 
-  return (
+  return (<>
+    <div className="list my-3">
+      <div className="item-list">
+        <div className='item d-flex justify-content-between align-items-center'>
+          <h3 className='mb-0'>{editProduct ? 'Edit Product' : 'Create Product'}</h3>
+        </div>
+      </div>
+    </div>
     <div className='products'>
       <form className="list" onSubmit={formik.handleSubmit}>
         <div className="form-group">
@@ -204,7 +212,7 @@ export default function Products() {
               type="text"
               name="product_code"
               placeholder="Enter product code"
-              value={formik.values.product_code}
+              value={formik.values.product_code || ''}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               className="form-control"
@@ -213,7 +221,7 @@ export default function Products() {
           <div className="form-group">
             <Dropdown
               name="image"
-              value={formik.values.image}
+              value={formik.values.image || ''}
               options={avaoptions}
               onChange={formik.handleChange}
               optionLabel="label"
@@ -227,7 +235,7 @@ export default function Products() {
             type="text"
             name="description"
             placeholder="Enter product description"
-            value={formik.values.description}
+            value={formik.values.description || ''}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="form-control"
@@ -242,5 +250,6 @@ export default function Products() {
         </div>
       </form>
     </div>
+  </>
   )
 }
