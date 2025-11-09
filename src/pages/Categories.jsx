@@ -16,6 +16,7 @@ export default function Categories() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [createCategory, setCreateCategory] = useState(false);
   const [editCategory, setEditCategory] = useState(false);
   const [category, setCategory] = useState({});
 
@@ -191,7 +192,7 @@ export default function Categories() {
 
   return (
     <>
-      <div className='products'>
+      {createCategory ? <div className='products'>
         <form className="list" onSubmit={formik.handleSubmit}>
           <div className="form-group">
             <input
@@ -253,19 +254,26 @@ export default function Categories() {
             />
           </div>
           <div className="form-group">
-            <button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button>
+            <div className='row'>
+              <div className='col-6'><button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button></div>
+              <div className='col-6'><button type="button" className="btn" onClick={() => setCreateCategory(false)}> Cancel </button></div>
+            </div>
             {errorMsg && <div className="input-error text-center mt-2">{errorMsg}</div>}
           </div>
         </form>
-      </div>
-      <div className="list mt-3">
-        {loading ?
-          <p className='text-center'>Loading...</p> :
-          categories.length > 0 ?
-            <div className="item-list">
-              <h3 className='text-center'>Available Categories</h3>
-              {
-                categories.map((item, index) => <div key={index} className="item srow">
+      </div> :
+        <div className="list mt-3">
+          <div className="item-list">
+            <div className='item d-flex justify-content-between align-items-center'>
+              <h3 className='mb-0'>Categories</h3>
+              <div className='py-2 px-2' onClick={() => setCreateCategory(true)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></div>
+            </div>
+          </div>
+          {loading ?
+            <p className='text-center'>Loading...</p> :
+            categories.length > 0 ?
+              <div className="item-list">
+                {categories.map((item, index) => <div key={index} className="item srow">
                   <div className='item-inner'>
                     <div className='itemid'>{item.category_id}</div>
                     <div className="meta">
@@ -280,9 +288,9 @@ export default function Categories() {
                       </div>
                     </div></div>
                 </div>)
-              }
-            </div> : <p className='text-center'>No Dosa Categories</p>}
-      </div>
+                }
+              </div> : <p className='text-center'>No Dosa Categories</p>}
+        </div>}
       <ConfirmModal
         show={showConfirm.show}
         title="Delete Confirmation"

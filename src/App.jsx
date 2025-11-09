@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux';
 import { getToken } from './util/Cookies'
 import { checkAndRemoveExpiredToken, fetchUserRole } from "./util/authUtils";
 import ProtectedRoute from './components/ProtectedRoute';
-import AdminProtectedRoute from './components/AdminProtectedRoute';
 import Categories from "./pages/Categories";
 import Products from "./pages/Products";
 import Orders from "./pages/Orders";
@@ -30,12 +29,12 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={isLoggedIn ? user_role === "admin" ? <AdminProtectedRoute><Dashboard /> </AdminProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <Login />} />
-      <Route path="/dashboard" element={isLoggedIn ? user_role === "admin" ? <AdminProtectedRoute><Dashboard /> </AdminProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <AdminLogin />} />
-      <Route path="/dashboard/categories" element={<AdminProtectedRoute><Categories /></AdminProtectedRoute>} />
-      <Route path="/dashboard/products" element={<AdminProtectedRoute><Products /></AdminProtectedRoute>} />
-      <Route path="/dashboard/orders" element={<AdminProtectedRoute><Orders /></AdminProtectedRoute>} />
-      <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+      <Route path="/" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <Login />} />
+      <Route path="/admin" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <AdminLogin />} />
+      <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
+      <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
+      <Route path="/orders" element={<ProtectedRoute allowedRoles={["admin"]}><Orders /></ProtectedRoute>} />
+      <Route path="/cart" element={<ProtectedRoute allowedRoles={["user","admin"]}><Cart /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { CreateProduct, GetCategories } from '../services/Productsservices';
 import { useSelector } from 'react-redux';
 import { decodeToken } from 'react-jwt';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import AlertModal from '../components/AlertModal';
 import { Dropdown } from 'primereact/dropdown';
 import config from '../config';
@@ -168,7 +168,7 @@ export default function Products() {
               {formik.touched.category_id && formik.errors.category_id ? (<div className="input-error">{formik.errors.category_id}</div>) : null}
             </div>
             <div className="col-2">
-              <button type='button' className='btn' onClick={() => navigate('/dashboard/categories')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></button>
+              <button type='button' className='btn' onClick={() => navigate('/categories')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></button>
             </div>
           </div>
         </div>
@@ -234,7 +234,10 @@ export default function Products() {
           />
         </div>
         <div className="form-group">
-          <button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button>
+          <div className='row'>
+            <div className='col-6'><button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button></div>
+            <div className='col-6'><button type="button" className="btn" onClick={() => navigate('/')}> Cancel </button></div>
+          </div>
           {errorMsg && <div className="input-error text-center mt-2">{errorMsg}</div>}
         </div>
       </form>
