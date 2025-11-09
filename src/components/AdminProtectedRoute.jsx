@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../store/userSlice';
 import { decodeToken } from 'react-jwt';
 import { logOut } from '../store/authSlice';
-import { Modal } from "bootstrap";
 
 const AdminProtectedRoute = ({ children }) => {
     const dispatch = useDispatch();
@@ -15,19 +14,6 @@ const AdminProtectedRoute = ({ children }) => {
     const token = useSelector((state) => state.auth.token);
     const decodedToken = decodeToken(token);
     const user_id = decodedToken?.user_id;
-
-    const modalRef = useRef();
-
-    const openModal = () => {
-        const modal = new Modal(modalRef.current);
-        modal.show();
-    };
-
-    const closeModal = () => {
-        document.activeElement?.blur();
-        const modal = Modal.getInstance(modalRef.current);
-        modal?.hide();
-    };
 
     useEffect(() => {
         user_id && dispatch(setUserDetails({
@@ -69,7 +55,6 @@ const AdminProtectedRoute = ({ children }) => {
                 navigate('/dashboard')
                 break;
         }
-        closeModal()
     }
 
     return (
@@ -77,9 +62,20 @@ const AdminProtectedRoute = ({ children }) => {
             <div className={`site ${isLoggedIn && 'inner dashboard'}`}>
                 <header className="site-header">
                     <div className="site-branding">
-                        <Link to="/dashboard"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
+                        <Link to="/"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
                     </div>
-                    <div className="login-user">Hello, {fullname} <span onClick={openModal}><i className="fa-solid fa-bars"></i></span></div>
+                    <div className="login-user">Hello, {fullname}
+                        <div className='d-flex gap-2'>
+
+                            <span onClick={() => navigate('/')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></span>
+
+                            <span onClick={() => menuNavigation('products')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></span>
+
+                            <span onClick={() => menuNavigation('orders')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m787-145 28-28-75-75v-112h-40v128l87 87Zm-587 25q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v268q-19-9-39-15.5t-41-9.5v-243H200v560h242q3 22 9.5 42t15.5 38H200Zm0-120v40-560 243-3 280Zm80-40h163q3-21 9.5-41t14.5-39H280v80Zm0-160h244q32-30 71.5-50t84.5-27v-3H280v80Zm0-160h400v-80H280v80ZM720-40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Z"/></svg></span>
+
+                            <span onClick={logoutAccount}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>
+                        </div>
+                    </div>
                 </header>
                 <main className="site-main">
                     <article className="page">
@@ -88,36 +84,6 @@ const AdminProtectedRoute = ({ children }) => {
                         </div>
                     </article>
                 </main>
-            </div>
-            <div
-                className="dfc-modal modal fade"
-                id="menuModal"
-                tabIndex="-1"
-                aria-hidden="true"
-                ref={modalRef}
-            >
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button
-                                type="button"
-                                className="btn-close"
-                                onClick={closeModal}
-                                aria-label="Close"
-                            ></button>
-                            <h4 className="modal-title">Settings</h4>
-
-                        </div>
-                        <div className="modal-body">
-                            <div className="list">
-                                <div className="item-category" onClick={() => menuNavigation('categories')}><span><span>Add Category</span><i className="fa-solid fa-chevron-right"></i></span></div>
-                                <div className="item-category" onClick={() => menuNavigation('products')}><span><span>Add Product</span><i className="fa-solid fa-chevron-right"></i></span></div>
-                                <div className="item-category" onClick={() => menuNavigation('orders')}><span><span>Orders</span><i className="fa-solid fa-chevron-right"></i></span></div>
-                                <div className="item-category" onClick={logoutAccount}><span><span>Exit</span><i className="fa-solid fa-chevron-right"></i></span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </>
     );

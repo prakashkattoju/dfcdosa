@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { verifyUser } from "../services/Authservices";
@@ -13,6 +13,7 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   // Formik initialization
   const formik = useFormik({
@@ -24,8 +25,8 @@ export default function Login() {
       uname: Yup.string()
         .required("Name is required"),
       mobile: Yup.string()
-        .required("Mobile Number is required")
-        .matches(/^[0-9]{10}$/, 'Invalid Mobile (10 digits)'),
+        .required("Mobile number is required")
+        .matches(/^[6-9]\d{9}$/, 'Enter a valid 10-digit Mobile number'),
     }),
     onSubmit: async (values) => {
       try {
@@ -37,7 +38,7 @@ export default function Login() {
           window.location.reload(true);
         }
       } catch (error) {
-        console.error("Error", error)
+        setErrorMsg(error.message)
       } finally {
         setLoading(false)
       }
@@ -49,7 +50,7 @@ export default function Login() {
       <div className="site login">
         <header className="site-header">
           <div className="site-branding">
-            <a href="/"><img src="Logo.png" alt="Dosa Filling Centre" /></a>
+            <Link to="/"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
           </div>
         </header>
         <main className="site-main">
@@ -72,7 +73,7 @@ export default function Login() {
                 </div>
                 <div className="form-group">
                   <input
-                    type="text"
+                    type="tel"
                     name="mobile"
                     placeholder="Enter your mobile number"
                     value={formik.values.mobile}
@@ -86,6 +87,7 @@ export default function Login() {
                 </div>
                 <div className="form-group">
                   <button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button>
+                  {errorMsg && <div className="input-error text-center mt-2">{errorMsg}</div>}
                 </div>
               </form>
             </div>
