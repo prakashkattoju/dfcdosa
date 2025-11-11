@@ -37,13 +37,10 @@ export default function Bill() {
         <div className='bill-details'>
             <div className='d-flex mb-4'><h4 className='bill-ins'>Please show order details to bill counter</h4><button type="button" className="btn-close ms-5" onClick={onClose}></button></div>
             <table>
-                <tbody>
-                    <tr><td>Date</td><td>:</td><td>{new Date().toLocaleDateString('en-IN')}</td></tr>
-                    <tr><td>Token No</td><td>:</td><td>1924</td></tr>
-                </tbody>
-            </table>
-            <table>
                 <thead>
+                    <tr><th className='pb-0' colSpan={2}>Date</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{new Date().toLocaleDateString('en-IN')}</th></tr>
+                    <tr><th className='pb-0' colSpan={2}>Token No</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>1924</th></tr>
+                    <tr><th colSpan={5} className='sep pb-0'></th></tr>
                     <tr><th className='pid'>#</th><th className='pname'>Items</th><th>Qty</th><th>I.Rs.</th><th>Rs.</th></tr>
                 </thead>
                 <tbody>
@@ -54,7 +51,7 @@ export default function Bill() {
                     <tr><td className='sep' colSpan={5}></td></tr>
                     <tr><td colSpan={2}>Total Amount</td><td colSpan={2}></td><td>{getCartAmount().replace("₹", "")}</td></tr>
                     <tr><td className='sep' colSpan={5}></td></tr>
-                    <tr><td colSpan={5}><h3 className='pt-4 text-center'>*** THANK YOU -- VISIT AGAIN ***</h3></td></tr>
+                    <tr><td colSpan={5}><h4 className='pt-4 text-center'>*** THANK YOU - VISIT AGAIN ***</h4></td></tr>
                 </tbody>
             </table>
         </div>

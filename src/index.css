@@ -1252,12 +1252,12 @@ input:checked+.slider::before {
 .bill-details table {
     width: 100%;
     padding: 15px 0;
-    border-top: 3px dashed #e9b328;
+    border-top: 2px dashed #e9b328;
     font-weight: 600;
 }
 
 .bill-details table thead {
-    border-bottom: 3px dashed #e9b328;
+    border-bottom: 2px dashed #e9b328;
 }
 
 .bill-details table th {
@@ -1275,8 +1275,8 @@ input:checked+.slider::before {
     width: 45%;
 }
 
-.bill-details table td.sep {
-    border-bottom: 3px dashed #e9b328;
+.bill-details table .sep {
+    border-bottom: 2px dashed #e9b328;
 }
 
 .bill-details table td {
