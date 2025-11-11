@@ -1162,7 +1162,7 @@ form.list button:hover {
 }
 
 #orders-tabContent .table {
-    font-size: 21px;
+    font-size: 16px;
 }
 
 #orders-tabContent .table thead th,
@@ -1189,6 +1189,7 @@ form.list button:hover {
 #orders-tabContent .table tbody th,
 #orders-tabContent .table tbody td {
     color: #ffffff;
+    align-content: center;
 }
 
 .switch {
