@@ -1,10 +1,9 @@
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
-import { incrementQuantity, decrementQuantity, clearCart } from '../store/cartSlice';
+import { incrementQuantity, decrementQuantity } from '../store/cartSlice';
 import { verifyCartItems } from '../store/cartThunks';
 import { useNavigate } from "react-router-dom";
-import { Modal } from "bootstrap";
 
 export default function Cart() {
 
@@ -26,21 +25,6 @@ export default function Cart() {
         }
         handleVerify()
     }, []);
-
-    const modalRef = useRef();
-
-    const openModal = () => {
-        const modal = new Modal(modalRef.current);
-        modal.show();
-    };
-
-    const closeModal = () => {
-        document.activeElement?.blur();
-        const modal = Modal.getInstance(modalRef.current);
-        modal.hide();
-        dispatch(clearCart());
-        navigate("/", { replace: true })
-    };
 
     const getQuantity = (product_id) => {
         const qty = cart.find((el) => el.product_id === product_id);
@@ -112,7 +96,7 @@ export default function Cart() {
                     <div className="cart-summary-badge">
                         <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
                         <div className="continue">
-                            <button className="btn" onClick={openModal}>Submit</button>
+                            <button className="btn" onClick={() => navigate('/bill')}>Submit</button>
                         </div>
                     </div>
                 </> :
@@ -122,60 +106,6 @@ export default function Cart() {
                     </div>
                 </div>
             }
-            <div
-                className="dfc-modal modal fade"
-                id="cartModal"
-                tabIndex="-1"
-                aria-hidden="true"
-                ref={modalRef}
-            >
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button
-                                type="button"
-                                className="btn-close"
-                                onClick={closeModal}
-                                aria-label="Close"
-                            ></button>
-                            <h4 className="modal-title">Order Details</h4>
-
-                        </div>
-                        <div className="modal-body">
-                            <h4 className="mb-3 text-center">Please show Token No. at bill counter.<br />Thank you.</h4>
-                            <div className="tbl-cart">
-                                <div>
-                                    <div>
-                                        <div className="token-num"><div>Token No</div><span className="num">10</span></div>
-
-                                        {cart.map((item, index) => <div key={index} className="cart-item">
-                                            <div className="cart-trow">
-                                                <div className="pname alt">{item.title}</div>
-                                            </div>
-                                            <div className="cart-brow">
-                                                <div className='pcode'>{`# ${item.product_id}`}</div>
-                                                <div className="input-group alt">
-                                                    <div>{getQuantity(parseInt(item.product_id))}</div>
-                                                    <div>&times;</div>
-                                                    <div>{priceDisplay(parseInt(item.unit_price)).replace("₹", "")}</div>
-                                                    <div>=</div>
-                                                    <div>{getCartItemsAmount(item).replace("₹", "")}</div>
-                                                </div>
-                                            </div>
-                                        </div>)}
-                                    </div>
-                                    <div className="cart-summary"><div className="noitems">No. Items: {getCartQuantity()}</div><div className="ftotal">{getCartAmount()}</div></div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={closeModal}>
-                                Close
-                            </button>
-                        </div> */}
-                    </div>
-                </div>
-            </div>
         </>
     )
 }

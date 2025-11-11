@@ -122,14 +122,14 @@ export default function Products() {
     if (editProduct && product) {
       const { product_id, category_id, product_code, title, unit_price, image, description, status } = product;
       formik.setValues({
-        product_id: product_id,
-        category_id: category_id,
-        product_code: product_code,
-        title: title,
-        unit_price: unit_price,
-        image: image,
-        description: description,
-        status: status
+        product_id: product_id || '',
+        category_id: category_id || '',
+        product_code: product_code || '',
+        title: title || '',
+        unit_price: unit_price || '',
+        image: image || '',
+        description: description || '',
+        status: status || ''
       })
     } else {
       formik.setValues(initialValues)

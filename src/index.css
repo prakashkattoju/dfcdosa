@@ -1028,6 +1028,7 @@ form.list button:hover {
     text-transform: uppercase;
     border-radius: 50%;
 }
+
 .login-user span.active {
     background-color: rgba(233, 179, 40, .25);
 }
@@ -1085,7 +1086,7 @@ form.list button:hover {
     background-color: #e9b328;
 }
 
-.dfc-modal .modal-content .modal-header .btn-close {
+.btn-close {
     color: #252525;
     opacity: 1;
     background-color: #e9b328;
@@ -1233,4 +1234,54 @@ input:checked+.slider {
 
 input:checked+.slider::before {
     transform: translateX(20px);
+}
+
+.bill-details {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #9a7414;
+}
+
+.bill-ins {
+    font-size: 24px;
+    width: 80%;
+    margin-bottom: 0;
+}
+
+.bill-details table {
+    width: 100%;
+    padding: 15px 0;
+    border-top: 3px dashed #e9b328;
+    font-weight: 600;
+}
+
+.bill-details table thead {
+    border-bottom: 3px dashed #e9b328;
+}
+
+.bill-details table th {
+    padding: 10px 10px 10px 0;
+}
+
+.bill-details table th.pid,
+.bill-details table td.pid {
+    width: 12%;
+    text-align: center;
+}
+
+.bill-details table th.pname,
+.bill-details table td.pname {
+    width: 45%;
+}
+
+.bill-details table td.sep {
+    border-bottom: 3px dashed #e9b328;
+}
+
+.bill-details table td {
+    padding: 10px 10px 0 0;
+}
+
+.bill-details table tr:last-child td {
+    padding-bottom: 10px;
 }

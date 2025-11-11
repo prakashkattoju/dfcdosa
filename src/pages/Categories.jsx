@@ -74,12 +74,11 @@ export default function Categories() {
 
   const initialValues = {
     category_id: '',
-    category_id: '',
     category_code: '',
     title: '',
     image: '',
     description: '',
-    status: "1"
+    status: ''
   }
   // Formik initialization
   const formik = useFormik({
