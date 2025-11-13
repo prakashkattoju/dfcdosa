@@ -35,7 +35,7 @@ export default function Bill() {
 
     return (
         <div className='bill-details'>
-            <div className='d-flex mb-4'><h4 className='bill-ins'>Please show order details to bill counter</h4><button type="button" className="btn-close ms-5" onClick={onClose}></button></div>
+            <div className='d-flex mb-3'><h4 className='bill-ins'>Please show order details to bill counter</h4><button type="button" className="btn-close ms-5" onClick={onClose}></button></div>
             <table>
                 <thead>
                     <tr><th className='pb-0' colSpan={2}>Date</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{new Date().toLocaleDateString('en-IN')}</th></tr>
