@@ -296,7 +296,9 @@ h4 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    margin-bottom: 35px;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid;
 }
 
 .dashboard .site-header-top {
@@ -322,6 +324,15 @@ h4 {
 
 .inner.dashboard .site-header .site-branding {
     margin: 0;
+}
+
+.inner.dashboard .site-header .navbar-nav{
+    border-bottom: 1px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: 15px;
 }
 
 .navi {
@@ -403,17 +414,22 @@ h4 {
 }
 
 .search-form .p-calendar input {
-    width: 85%;
-    font-size: 18px;
+    width: 100%;
+    font-size: 20px;
     font-weight: 600;
     color: #e9b328;
     background-color: transparent;
-    padding: 8px 15px;
+    padding: 8px 15px 8px 45px;
     margin-left: 0;
+    border: 0;
 }
 
-.search-form .p-calendar input:focus {
+.search-form .p-calendar input:focus,
+.search-form .p-calendar input:active,
+.search-form .p-calendar button.p-datepicker-trigger:focus,
+.search-form .p-calendar button.p-datepicker-trigger:active {
     outline: unset;
+    box-shadow: unset;
 }
 
 .search-form .p-calendar button.p-datepicker-trigger {
@@ -421,18 +437,17 @@ h4 {
     background: transparent;
     color: #e9b328;
     position: absolute;
-    top: 0;
-    padding: 15px;
     width: 100%;
     top: 0;
     right: 0;
+    padding: 10px 0;
 }
 
 
 .search-form .p-calendar button.p-datepicker-trigger svg {
-    width: 20px;
-    height: 20px;
-    margin-left: auto;
+    width: 24px;
+    height: 24px;
+    margin-right: auto;
 }
 
 .p-datepicker.active-date-panel {
@@ -468,6 +483,10 @@ h4 {
 
 .menu-items {
     position: relative;
+}
+
+.inner.dashboard .menu-items {
+    margin-top: 15px;
 }
 
 .list {
@@ -1132,7 +1151,7 @@ form.list button:hover {
     justify-content: flex-end;
 } */
 
-.adminmenu span {
+.inner.dashboard .navbar-nav .nav-link{
     display: block;
     padding: 10px 12px;
     text-transform: uppercase;
@@ -1141,7 +1160,7 @@ form.list button:hover {
     font-weight: 500;
 }
 
-.adminmenu span.active {
+.inner.dashboard .navbar-nav .nav-link.active {
     background-color: rgba(233, 179, 40, .25);
 }
 
