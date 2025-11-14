@@ -2,14 +2,18 @@ import { useState } from 'react'
 import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../store/cartSlice';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { TbDashboardFilled } from 'react-icons/tb';
 
 export default function Bill() {
     const dispatch = useDispatch()
+    const location = useLocation();
     const cart = useSelector((state) => state.cart.cart);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
+    const user = useSelector((state) => state.user);
+
+    const { token_num } = location.state || 0;
 
     const getQuantity = (product_id) => {
         const qty = cart.find((el) => el.product_id === product_id);
@@ -35,11 +39,17 @@ export default function Bill() {
 
     return (
         <div className='bill-details'>
-            <div className='d-flex mb-3'><h4 className='bill-ins'>Please show order details to bill counter</h4><button type="button" className="btn-close ms-5" onClick={onClose}></button></div>
+            <button type="button" className="btn-close" onClick={onClose}></button>
+            <h2>Order Details</h2>
+            <h4>Please show order details to counter</h4>
             <table>
                 <thead>
+                    <tr className='token'><th className='pb-0' colSpan={2}>Token No</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{token_num}</th></tr>
+                    <tr><th colSpan={5} className='sep pb-0'></th></tr>
                     <tr><th className='pb-0' colSpan={2}>Date</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{new Date().toLocaleDateString('en-IN')}</th></tr>
-                    <tr><th className='pb-0' colSpan={2}>Token No</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>1924</th></tr>
+                    <tr><th colSpan={5} className='sep pb-0'></th></tr>
+                    <tr><th className='pb-0' colSpan={2}>Name</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{user.fullname}</th></tr>
+                    <tr><th className='pb-0' colSpan={2}>Mobile Number</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{user.mobile}</th></tr>
                     <tr><th colSpan={5} className='sep pb-0'></th></tr>
                     <tr><th className='pid'>#</th><th className='pname'>Items</th><th>Qty</th><th>I.Rs.</th><th>Rs.</th></tr>
                 </thead>

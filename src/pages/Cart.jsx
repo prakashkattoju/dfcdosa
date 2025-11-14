@@ -4,27 +4,33 @@ import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity } from '../store/cartSlice';
 import { verifyCartItems } from '../store/cartThunks';
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from '../components/ConfirmModal';
+import { CreateBill } from '../services/Billservices';
 
 export default function Cart() {
 
     const cart = useSelector((state) => state.cart.cart);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [removedItems, setRemovedItems] = useState([])
+    //const [removedItems, setRemovedItems] = useState([])
     const [loading, setLoading] = useState(false);
+    const [showConfirm, setShowConfirm] = useState({
+        title: null,
+        show: false
+    });
 
-    useEffect(() => {
+    /* useEffect(() => {
         const handleVerify = async () => {
             setLoading(true)
             const { availableItems, removedItems } = await dispatch(verifyCartItems()).unwrap();
             if (removedItems.length > 0) {
                 setRemovedItems(removedItems)
-                
+
             }
             setLoading(false)
         }
         handleVerify()
-    }, []);
+    }, []); */
 
     const getQuantity = (product_id) => {
         const qty = cart.find((el) => el.product_id === product_id);
@@ -49,9 +55,37 @@ export default function Cart() {
         dispatch(incrementQuantity(product_id));
     }
 
+    const handleCancel = () => {
+        document.activeElement?.blur();
+        setShowConfirm({
+            title: null,
+            show: false
+        });
+    };
+
+    const handleConfirmSubmit = async () => {
+        handleCancel();
+        const cartdata = {
+            total_quantity: getCartQuantity(),
+            total_price: cart.reduce((total, item) => total + item.unit_price * item.quantity, 0),
+            items: cart
+        };
+        try {
+            setLoading(true)
+            const data = await CreateBill(cartdata);
+            if (data.status) {
+                navigate('/bill', { state: { token_num: data.token_num } })
+            }
+        } catch (error) {
+            console.error("Error", error.message)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <>
-            {removedItems.length > 0 && <div className="cart-summary-review removed">
+            {/* {removedItems.length > 0 && <div className="cart-summary-review removed">
                 <h3>Sorry, the below item(s) are not available</h3>
                 <div className="tbl-cart show-cart">
                     <div>
@@ -63,7 +97,7 @@ export default function Cart() {
                         </div>)}
                     </div>
                 </div>
-            </div>}
+            </div>} */}
             {cart.length > 0 ?
                 <>
                     <div className="cart-summary-review">
@@ -96,7 +130,10 @@ export default function Cart() {
                     <div className="cart-summary-badge">
                         <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
                         <div className="continue">
-                            <button className="btn" onClick={() => navigate('/bill')}>Submit</button>
+                            <button className="btn" onClick={() => setShowConfirm({
+                                title: null,
+                                show: true
+                            })}>Submit</button>
                         </div>
                     </div>
                 </> :
@@ -106,6 +143,14 @@ export default function Cart() {
                     </div>
                 </div>
             }
+            <ConfirmModal
+                show={showConfirm.show}
+                title="Confirm"
+                message={`Are you sure you want to place your order?`}
+                onConfirm={handleConfirmSubmit}
+                onConfirmLabel="Yes, Place Order"
+                onCancel={handleCancel}
+            />
         </>
     )
 }

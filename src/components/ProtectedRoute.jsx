@@ -43,6 +43,10 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     window.location.reload(true);
   };
 
+  const backBtn = () => {
+    navigate('/')
+  }
+
   const user = useSelector((state) => state.user);
 
   const menuNavigation = (page) => {
@@ -72,28 +76,32 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
   return (
     <div className={`site ${isLoggedIn && user_role === "admin" ? 'inner dashboard' : 'inner'} ${cart.length > 0 && 'cart'}`}>
-      <header className="site-header">
-        <div className="site-branding">
-          <Link to="/"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
+      
+      {((user_role === "user" && location.pathname !== "/bill") || user_role === "admin" ) && <header className="site-header">
+        <div className='site-header-top'>
+          {user_role === "user" && <div className='navi d-flex gap-2 justify-content-start' onClick={backBtn}>{location.pathname === "/" ? <div>&nbsp;</div> : <><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/></svg>Back</>}</div>}
+          <div className="site-branding">
+            <Link to="/"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
+          </div>
+          
+          <div className='navi d-flex gap-2 justify-content-end align-items-center' onClick={logoutAccount}>
+            {user_role === "admin" && <><span className='d-flex gap-2 justify-content-end align-items-center'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z"/></svg> {user.fullname}</span><span>|</span></>}
+            <span className='d-flex gap-2 justify-content-end align-items-center'>Exit<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>
+            
+          </div>
         </div>
+        {user_role === "user" && <div className="login-user">
+          <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z"/></svg> {user.fullname}</span>
+          <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M280-40q-33 0-56.5-23.5T200-120v-720q0-33 23.5-56.5T280-920h400q33 0 56.5 23.5T760-840v124q18 7 29 22t11 34v80q0 19-11 34t-29 22v404q0 33-23.5 56.5T680-40H280Zm0-80h400v-720H280v720Zm0 0v-720 720Zm200-600q17 0 28.5-11.5T520-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760q0 17 11.5 28.5T480-720Z"/></svg> {user.mobile}</span>
+        </div>}
+        {user_role === "admin" && <div className='adminmenu d-flex gap-2 justify-content-center align-items-center mb-3'>
+          <span className={location.pathname === "/" ? "active" : ""} onClick={() => navigate('/')}>Orders</span>
 
-        <div className="login-user">Hello, {user.fullname}
+          <span className={location.pathname === "/products" ? "active" : ""} onClick={() => menuNavigation('products')}>Products</span>
 
-          {user_role === "user" && <span onClick={logoutAccount}>Exit <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>}
+        </div>}
+      </header>}
 
-          {user_role === "admin" && <div className='d-flex gap-2'>
-
-            <span className={location.pathname === "/" ? "active" : ""} onClick={() => navigate('/')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" /></svg></span>
-
-            <span className={location.pathname === "/products" ? "active" : ""} onClick={() => menuNavigation('products')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></span>
-
-            <span className={location.pathname === "/orders" ? "active" : ""} onClick={() => menuNavigation('orders')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m787-145 28-28-75-75v-112h-40v128l87 87Zm-587 25q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v268q-19-9-39-15.5t-41-9.5v-243H200v560h242q3 22 9.5 42t15.5 38H200Zm0-120v40-560 243-3 280Zm80-40h163q3-21 9.5-41t14.5-39H280v80Zm0-160h244q32-30 71.5-50t84.5-27v-3H280v80Zm0-160h400v-80H280v80ZM720-40q-83 0-141.5-58.5T520-240q0-83 58.5-141.5T720-440q83 0 141.5 58.5T920-240q0 83-58.5 141.5T720-40Z" /></svg></span>
-
-            <span onClick={logoutAccount}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>
-          </div>}
-        </div>
-
-      </header>
       <main className="site-main">
         <article className="page">
           <div className="entry-content">

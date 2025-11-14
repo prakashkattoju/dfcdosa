@@ -1,4 +1,4 @@
-export default function ConfirmModal({ show, title, message, onConfirm, onCancel }) {
+export default function ConfirmModal({ show, title, message, onConfirm, onConfirmLabel, onCancel }) {
   return (
     <div
       className={`dfc-modal modal fade ${show ? "show d-flex" : ""}`}
@@ -24,7 +24,7 @@ export default function ConfirmModal({ show, title, message, onConfirm, onCancel
               Cancel
             </button>
             <button className="btn" onClick={onConfirm}>
-              Delete
+              {onConfirmLabel || "Delete"}
             </button>
           </div>
         </div>

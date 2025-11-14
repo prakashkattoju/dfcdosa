@@ -1,6 +1,5 @@
 import axiosInstance from "../util/axiosInstance";
 
-
 export const CreateProduct = async (productdata) => {
 
     try {
@@ -45,6 +44,21 @@ export const GetCategories = async () => {
         }
     }
 };
+
+/* export const GetSubCategories = async () => {
+
+    try {
+        const response = await axiosInstance.get(`/categories/sub/`);
+        return response.data;
+    } catch (error) {
+        // Check if error response exists and log the error message
+        if (error.response) {
+            throw new Error(error.response.data.message); // Throw error message from server
+        } else {
+            throw new Error("Something Went Wrong"); // General error message
+        }
+    }
+}; */
 
 export const ChangeProductStatus = async (formdata) => {
     try {

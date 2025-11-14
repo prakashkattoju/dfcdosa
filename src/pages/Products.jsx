@@ -1,29 +1,44 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
-import { CreateProduct, GetCategories } from '../services/Productsservices';
-import { useSelector } from 'react-redux';
-import { decodeToken } from 'react-jwt';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState, useCallback } from 'react'
+import { GetProducts, GetCategories, ChangeProductStatus, DeleteProductByID } from '../services/Productsservices';
+import priceDisplay from '../util/priceDisplay';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import ConfirmModal from '../components/ConfirmModal';
 import AlertModal from '../components/AlertModal';
-import { Dropdown } from 'primereact/dropdown';
-import config from '../config';
-import { FaSpinner } from "react-icons/fa";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 
 export default function Products() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const location = useLocation();
+
+  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [editProduct, setEditProduct] = useState(location.state ? true : false);
-  const [product, setProduct] = useState(location.state ? location.state?.product : {});
+  const [searchResults, setSearchResults] = useState([]);
+  const [notFound, setNotFound] = useState(false);
+  const [queryString, setQueryString] = useState('');
+  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeSubCategory, setActiveSubCategory] = useState(null);
+  const [showConfirm, setShowConfirm] = useState({
+    id: null,
+    title: null,
+    show: false
+  });
 
   const [showAlert, setShowAlert] = useState({
     title: null,
     message: null,
     show: false
   });
+
+  const fetchproducts = useCallback(async () => {
+    try {
+      const productsdata = await GetProducts();
+      setProducts(productsdata);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  }, []);
 
   const fetchcategories = useCallback(async () => {
     setLoading(true)
@@ -38,218 +53,230 @@ export default function Products() {
   }, []);
 
   useEffect(() => {
+    fetchproducts();
     fetchcategories();
-  }, [fetchcategories]);
+  }, [fetchproducts, fetchcategories]);
 
-  const avaoptions = [
-    { label: "YES", value: "1" },
-    { label: "NO", value: "0" },
-  ];
+  const updateProduct = (product_id, newData) => {
+    setSearchResults(prevItems =>
+      prevItems.map(item =>
+        item.product_id === product_id ? { ...item, ...newData } : item
+      )
+    );
+  };
 
-  function objectToFormData(obj, form = new FormData(), namespace = '') {
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        const formKey = namespace ? `${namespace}[${key}]` : key;
-        const value = obj[key];
+  const handleChangeStatus = async (product_id, status) => {
+    //console.log("status", status)
+    try {
+      const res = await ChangeProductStatus({
+        product_id: product_id,
+        status: status
+      });
+      if (res.status) {
+        updateProduct(product_id, { status: !status })
+      }
+    } catch (error) {
+      console.error("Failed to change status:", error);
+    }
+  }
 
-        if (value instanceof Date) {
-          form.append(formKey, value.toISOString());
-        } else if (value instanceof File || value instanceof Blob) {
-          form.append(formKey, value);
-        } else if (typeof value === 'object' && value !== null) {
-          objectToFormData(value, form, formKey); // recurse
-        } else {
-          form.append(formKey, value ?? ''); // convert null to empty string
-        }
+
+  const setSearchResultsFunc = (text) => {
+    if (text === '') {
+      if (activeCategory === null) {
+        setSearchResults([])
+        setNotFound(false)
+      } else {
+        const filteredData = products.filter((item) => {
+          return item.category_id === activeCategory;
+        });
+        filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+      }
+    } else {
+      if (activeCategory === null) {
+        const filteredData = products.filter((item) => {
+          return item.title.toLowerCase().includes(text.toLowerCase());
+        });
+        filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+      } else {
+        const filteredData = searchResults.filter((item) => {
+          return item.title.toLowerCase().includes(text.toLowerCase());
+        });
+        filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
       }
     }
-    return form;
+    setQueryString(text)
   }
 
-  const initialValues = {
-    product_id: '',
-    category_id: '',
-    product_code: '',
-    title: '',
-    unit_price: '',
-    image: '',
-    description: '',
-    status: ''
+  const setCategoryResultsFunc = (category_id) => {
+
+    const categoryObj = categories.find((item) => item.category_id == category_id);
+    setSubCategories(categoryObj.sub_cats)
+
+    const filteredData = products.filter((item) => {
+      return item.category_id === category_id;
+    });
+    filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+    filteredData.length > 0 && setActiveCategory(category_id)
   }
-  // Formik initialization
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: Yup.object({
-      title: Yup.string()
-        .required("Product title is required"),
-      category_id: Yup.string()
-        .required("Category is required"),
-      status: Yup.string()
-        .required("Availability is required"),
-      unit_price: Yup.string()
-        .required("Price is required"),
-    }),
-    onSubmit: async (values, { resetForm }) => {
-      console.log("values", values)
-      /* try {
-        setLoading(true)
-        const formData = objectToFormData(values);
-        const data = await CreateProduct(formData);
-        if (data.status) {
-          setShowAlert({
-            title: 'Success!',
-            message: data.message,
-            show: true
-          })
-          if (editProduct) {
-            setEditProduct(false)
-          }
-          resetForm();
-        }
-      } catch (error) {
+
+  const setSubCategoryResultsFunc = (sub_cat_id) => {
+
+    const filteredData = products.filter((item) => {
+      return item.sub_cat_id === sub_cat_id;
+    });
+    filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+    filteredData.length > 0 && setActiveSubCategory(sub_cat_id)
+  }
+
+  const clearSearch = () => {
+    if (activeCategory === null) {
+      setSearchResults([])
+      setNotFound(false)
+    }
+    setQueryString('')
+  }
+
+  const clearCategorySearch = () => {
+    if (queryString === "") {
+      setSearchResults([])
+      setNotFound(false)
+    }
+    setActiveCategory(null)
+    setActiveSubCategory(null)
+  }
+
+  //console.log("searchResults", searchResults)
+
+  const getCategoryTitle = (activeCategory) => {
+    const category = categories.find(el => el.category_id == activeCategory);
+    return category.title;
+  }
+
+  const toBoolean = (value) => {
+    return value === "1" || value === 1 || value === true;
+  };
+
+  const handleDeleteClick = (product_id, title) => {
+    setShowConfirm({
+      id: product_id,
+      title: title,
+      show: true
+    });
+  };
+
+  const handleConfirmDelete = async (product_id) => {
+    try {
+      const data = await DeleteProductByID(product_id);
+      if (data.status) {
+        document.activeElement?.blur();
+        setShowConfirm({
+          id: null,
+          title: null,
+          show: false
+        });
         setShowAlert({
-          title: 'Error!',
-          message: error.message,
+          title: 'Deleted!',
+          message: data.message,
           show: true
         })
-      } finally {
-        setLoading(false)
-      } */
-    },
-  });
-
-  useEffect(() => {
-    if (editProduct && product) {
-      const { product_id, category_id, product_code, title, unit_price, image, description, status } = product;
-      formik.setValues({
-        product_id: product_id || '',
-        category_id: category_id || '',
-        product_code: product_code || '',
-        title: title || '',
-        unit_price: unit_price || '',
-        image: image || '',
-        description: description || '',
-        status: status || ''
-      })
-    } else {
-      formik.setValues(initialValues)
+      }
+    } catch (error) {
+      console.error(error.message || "An error occurred.")
+    } finally {
+      document.activeElement?.blur();
+      setShowConfirm({
+        id: null,
+        title: null,
+        show: false
+      });
     }
-  }, [product, editProduct])
+  }
 
-  return (<>
-    <div className="list my-3">
-      <div className="item-list">
-        <div className='item d-flex justify-content-between align-items-center'>
-          <h3 className='mb-0'>{editProduct ? 'Edit Product' : 'Create Product'}</h3>
+  const handleCancel = () => {
+    document.activeElement?.blur();
+    setShowConfirm({
+      id: null,
+      title: null,
+      show: false
+    });
+  };
+
+  return (
+    <div className="menu-items">
+      <div className="search-form">
+        <div className="form-group">
+          <input className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
+          {((searchResults.length > 0 || notFound) && queryString !== "") && <span className='clear-search' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
         </div>
       </div>
+      {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <>
+        {activeCategory !== null && <div className="list sticky"><div onClick={clearCategorySearch} className="item-category active">
+          <span><span>{getCategoryTitle(activeCategory)}</span><span className='clear-search'><i className="fa-solid fa-xmark"></i></span></span>
+        </div>{subCategories.length > 0 && <div className="item-list">
+          <div className='sub-category-list'>
+            {subCategories.map((item, index) => item.status === "1" && <div onClick={() => setSubCategoryResultsFunc(item.sub_cat_id)} key={index} className={`item-category sub-category ${item.sub_cat_id === activeSubCategory && 'active'}`}>{item.title}</div>)}
+          </div>
+        </div>}</div>}
+        <div className="list">
+          {searchResults.length > 0 ? <div className="item-list">{
+            searchResults.map((item, index) => <div key={index} className="item">
+              <div className='item-inner'>
+                {/* <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div> */}
+                <div className='itemid'>{item.product_id}</div>
+                <div className="meta">
+                  <h2>{item.title}</h2>
+                  <div className="meta-inner">
+                    <div className="meta-info">
+                      <div className="price">{priceDisplay(parseInt(item.unit_price))}</div>
+                      <span className="itemid"># {item.product_id}</span>
+                    </div>
+                    <div className="cart-action">
+                      <div className="opt status">
+                        <label className="switch">
+                          <input
+                            type="checkbox"
+                            checked={toBoolean(item.status)}
+                            onChange={() => handleChangeStatus(item.product_id, toBoolean(item.status))}
+                          />
+                          <span className="slider"></span>
+                          <span className="label-text">{toBoolean(item.status) ? "YES" : "NO"}</span>
+                        </label>
+
+                        {/* <button className="edit" onClick={() => navigate('/products', {state: {product: item}})}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z"/></svg></button>
+
+                        <button className="edit" onClick={() => handleDeleteClick(item.product_id, item.title)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg></button> */}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>)
+          }</div> : categories.length > 0 ? categories.map((item, index) => <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
+          </div>) : <p className='text-center'>No Dosa Categories</p>
+          }
+        </div></>}
+      <ConfirmModal
+        show={showConfirm.show}
+        title="Delete Confirmation"
+        message={`Are you sure you want to delete "${showConfirm.title}"?`}
+        onConfirm={() => handleConfirmDelete(showConfirm.id)}
+        onConfirmLabel="Delete"
+        onCancel={handleCancel}
+      />
+      <AlertModal
+        show={showAlert.show}
+        title={showAlert.title}
+        message={showAlert.message || `Product deleted successfully`}
+        onClose={() => {
+          setShowAlert({
+            title: null,
+            message: null,
+            show: false
+          })
+          window.location.reload(true);
+        }}
+      />
     </div>
-    <div className='products'>
-      <form className="list" onSubmit={formik.handleSubmit}>
-        <div className="form-group">
-          <input
-            type="text"
-            name="title"
-            placeholder="Enter product title"
-            value={formik.values.title}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="form-control"
-          />
-          {formik.touched.title && formik.errors.title ? (<div className="input-error">{formik.errors.title}</div>) : null}
-        </div>
-        <div className="form-group">
-          <div className='row'>
-            <div className="col-10">
-              <Dropdown
-                name="category_id"
-                value={formik.values.category_id}
-                options={categories}
-                onChange={formik.handleChange}
-                filter
-                filterBy="title"
-                filterMatchMode="startsWith"
-                optionLabel="title"
-                optionValue="category_id"
-                placeholder="Select Category"
-              />
-              {formik.touched.category_id && formik.errors.category_id ? (<div className="input-error">{formik.errors.category_id}</div>) : null}
-            </div>
-            <div className="col-2">
-              <button type='button' className='btn' onClick={() => navigate('/categories')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z" /></svg></button>
-            </div>
-          </div>
-        </div>
-        <div className="form-group d-flex gap-3">
-          <div className="form-group">
-            <Dropdown
-              name="status"
-              value={formik.values.status}
-              options={avaoptions}
-              onChange={formik.handleChange}
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select Availability"
-            />
-            {formik.touched.status && formik.errors.status ? (<div className="input-error">{formik.errors.status}</div>) : null}
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              name="unit_price"
-              placeholder="Enter price"
-              value={formik.values.unit_price}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="form-control"
-            />
-            {formik.touched.unit_price && formik.errors.unit_price ? (<div className="input-error">{formik.errors.unit_price}</div>) : null}
-          </div>
-        </div>
-        <div className="form-group d-flex gap-3">
-          <div className="form-group">
-            <input
-              type="text"
-              name="product_code"
-              placeholder="Enter product code"
-              value={formik.values.product_code || ''}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <Dropdown
-              name="image"
-              value={formik.values.image || ''}
-              options={avaoptions}
-              onChange={formik.handleChange}
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Select Image"
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <input
-            type="text"
-            name="description"
-            placeholder="Enter product description"
-            value={formik.values.description || ''}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            className="form-control"
-          />
-        </div>
-        <div className="form-group">
-          <div className='row'>
-            <div className='col-6'><button type="submit" className="btn">{loading && <FaSpinner className="animate-spin" />} Submit </button></div>
-            <div className='col-6'><button type="button" className="btn" onClick={() => navigate('/')}> Cancel </button></div>
-          </div>
-          {errorMsg && <div className="input-error text-center mt-2">{errorMsg}</div>}
-        </div>
-      </form>
-    </div>
-  </>
   )
 }

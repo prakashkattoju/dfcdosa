@@ -310,6 +310,7 @@ export default function Categories() {
         title="Delete Confirmation"
         message={`Are you sure you want to delete "${showConfirm.title}"?`}
         onConfirm={() => handleConfirmDelete(showConfirm.id)}
+        onConfirmLabel="Delete"
         onCancel={handleCancel}
       />
       <AlertModal

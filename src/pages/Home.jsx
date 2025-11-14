@@ -13,11 +13,13 @@ export default function Home() {
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [subCategories, setSubCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [notFound, setNotFound] = useState(false);
     const [queryString, setQueryString] = useState('');
     const [activeCategory, setActiveCategory] = useState(null);
+    const [activeSubCategory, setActiveSubCategory] = useState(null);
 
     const fetchproducts = useCallback(async () => {
         try {
@@ -78,6 +80,10 @@ export default function Home() {
     }
 
     const setCategoryResultsFunc = (category_id) => {
+
+        const categoryObj = categories.find((item) => item.category_id == category_id);
+        setSubCategories(categoryObj.sub_cats)
+
         const filteredData = products.filter((item) => {
             return item.category_id === category_id;
         });
@@ -85,8 +91,17 @@ export default function Home() {
         filteredData.length > 0 && setActiveCategory(category_id)
     }
 
+    const setSubCategoryResultsFunc = (sub_cat_id) => {
+
+        const filteredData = products.filter((item) => {
+            return item.sub_cat_id === sub_cat_id;
+        });
+        filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+        filteredData.length > 0 && setActiveSubCategory(sub_cat_id)
+    }
+
     const clearSearch = () => {
-        if(activeCategory === null){
+        if (activeCategory === null) {
             setSearchResults([])
             setNotFound(false)
         }
@@ -94,14 +109,13 @@ export default function Home() {
     }
 
     const clearCategorySearch = () => {
-        if(queryString === ""){
+        if (queryString === "") {
             setSearchResults([])
             setNotFound(false)
         }
         setActiveCategory(null)
+        setActiveSubCategory(null)
     }
-
-    //console.log("searchResults", searchResults)
 
     const getCategoryTitle = (activeCategory) => {
         const category = categories.find(el => el.category_id == activeCategory);
@@ -145,13 +159,18 @@ export default function Home() {
                     </div>
                 </div>
                 {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <>
-                    {activeCategory !== null && <div className="list sticky"><div className="item-category active">
-                        <span><span>{getCategoryTitle(activeCategory)}</span><span className='clear-search' onClick={clearCategorySearch}><i className="fa-solid fa-xmark"></i></span></span>
-                    </div></div>}
+                    {activeCategory !== null && <div className="list sticky"><div className="item-category active" onClick={clearCategorySearch}><span><span>{getCategoryTitle(activeCategory)}</span><span className='clear-search'><i className="fa-solid fa-xmark"></i></span></span>
+                    </div>
+                        {subCategories.length > 0 && <div className="item-list">
+                            <div className='sub-category-list'>
+                                {subCategories.map((item, index) => item.status === "1" && <div onClick={() => setSubCategoryResultsFunc(item.sub_cat_id)} key={index} className={`item-category sub-category ${item.sub_cat_id === activeSubCategory && 'active'}`}>{item.title}</div>)}
+                            </div>
+                        </div>}
+                    </div>}
                     <div className="list">{searchResults.length > 0 ? <div className="item-list">{
                         searchResults.map((item, index) => <div key={index} className="item">
                             <div className='item-inner'>
-                                <div className="img"><img width="100" height="100" src="/rava-dosa-recipe-1-100x100.jpg" className="attachment-100x100 size-100x100" alt="" /></div>
+                                <div className="img"><img width="100" height="100" src="/dosa.webp" alt={item.title} /></div>
                                 <div className="meta">
                                     <h2>{item.title}</h2>
                                     <div className="meta-inner">
@@ -176,10 +195,10 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>)
-                    }</div> : categories.length > 0 ? categories.map((item, index) => <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
+                    }</div> : categories.length > 0 ? categories.map((item, index) => item.status === "1" && <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
                     </div>) : <p className='text-center'>No Dosa Categories</p>
                     }
-                </div></>}
+                    </div></>}
             </div>
             {cart.length > 0 && <div className="cart-summary-badge">
                 <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
