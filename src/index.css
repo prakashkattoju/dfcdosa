@@ -296,8 +296,8 @@ h4 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid;
 }
 
@@ -326,13 +326,27 @@ h4 {
     margin: 0;
 }
 
-.inner.dashboard .site-header .navbar-nav{
+.inner.dashboard .navbar-nav{
     border-bottom: 1px solid;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.inner.dashboard .navbar-nav .nav-link{
+    display: block;
+    padding: 10px 12px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    line-height: 1;
+    font-weight: 500;
+}
+
+.inner.dashboard .navbar-nav .nav-link.active {
+    background-color: rgba(233, 179, 40, .25);
 }
 
 .navi {
@@ -409,17 +423,25 @@ h4 {
     display: flex;
     position: relative;
     width: 100%;
-    margin-bottom: 10px;
-    margin-top: 10px;
+}
+
+.search-form .p-calendar::after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 10px);
+    height: 2px;
+    background-color: #e9b328;
+    bottom: 0;
+    left: 0;
 }
 
 .search-form .p-calendar input {
     width: 100%;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: #e9b328;
     background-color: transparent;
-    padding: 8px 15px 8px 45px;
+    padding: 0.5rem 1rem 0.5rem 30px;
     margin-left: 0;
     border: 0;
 }
@@ -445,8 +467,8 @@ h4 {
 
 
 .search-form .p-calendar button.p-datepicker-trigger svg {
-    width: 24px;
-    height: 24px;
+    width: 21px;
+    height: 21px;
     margin-right: auto;
 }
 
@@ -1150,19 +1172,6 @@ form.list button:hover {
 /* .site.dashboard .site-header .login-user {
     justify-content: flex-end;
 } */
-
-.inner.dashboard .navbar-nav .nav-link{
-    display: block;
-    padding: 10px 12px;
-    text-transform: uppercase;
-    border-radius: 5px;
-    line-height: 1;
-    font-weight: 500;
-}
-
-.inner.dashboard .navbar-nav .nav-link.active {
-    background-color: rgba(233, 179, 40, .25);
-}
 
 .dfc-modal {
     background-color: #252525e6;

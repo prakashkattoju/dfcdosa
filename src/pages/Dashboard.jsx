@@ -2,17 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Calendar } from 'primereact/calendar';
 import { format } from 'date-fns'
 import { GetOrders } from '../services/Billservices';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Dashboard() {
-
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState([])
   const [searchActive, setSearchActive] = useState(false)
   const [activeStatus, setActiveStatus] = useState(0);
-  const [activeDate, setActiveDate] = useState(new Date());
+  const [activeDate, setActiveDate] = useState(location.state ? new Date(location.state) : new Date());
   const [activeToken, setActiveToken] = useState('')
   const [activeMobile, setActiveMobile] = useState('')
 
@@ -68,34 +68,38 @@ export default function Dashboard() {
   return (
     <>
       <div className="search-form">
-        <div className="form-group mb-2">
-          <Calendar
-            value={activeDate}
-            onChange={(e) => setActiveDate(e.value)}
-            className="active-date"
-            inputClassName="form-control"
-            panelClassName="active-date-panel"
-            placeholder="Selecct Date"
-            showIcon
-            maxDate={new Date()}
-            readOnlyInput={true}
-            dateFormat="dd-M-yy"
-          />
-        </div>
         <div className="form-group d-flex gap-2">
           <input className="form-control" type="number" value={activeToken} onChange={(e) => setActiveToken(e.target.value)} placeholder="Token..." autoComplete="off" />
           <input className="form-control" type="number" value={activeMobile} onChange={(e) => setActiveMobile(e.target.value)} placeholder="Mobile..." autoComplete="off" maxLength={10} />
           {!searchActive ? <button disabled={activeMobile === "" && activeToken === ""} onClick={() => handleSearch()} type='button' className='form-control btn'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg></button> : <button onClick={() => handleSearchCancel()} type='button' className='form-control btn'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg></button>}
         </div>
       </div>
-      <ul className="nav nav-pills mb-3 justify-content-center" id="orders-tab" role="tablist">
-        <li className="nav-item" role="presentation">
-          <button className="nav-link active" id="orders-pending-tab" data-bs-toggle="pill" data-bs-target="#orders-pending" type="button" role="tab" aria-controls="orders-pending" aria-selected="true">Pending</button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button className="nav-link" id="orders-completed-tab" data-bs-toggle="pill" data-bs-target="#orders-completed" type="button" role="tab" aria-controls="orders-completed" aria-selected="false">Completed</button>
-        </li>
-      </ul>
+      <div className='row justify-content-between align-items-center mb-3'>
+        <div className="col-5 search-form mb-0">
+          <div className="form-group">
+            <Calendar
+              value={activeDate}
+              onChange={(e) => setActiveDate(e.value)}
+              className="active-date"
+              inputClassName="form-control"
+              panelClassName="active-date-panel"
+              placeholder="Selecct Date"
+              showIcon
+              maxDate={new Date()}
+              readOnlyInput={true}
+              dateFormat="dd-M-yy"
+            />
+          </div>
+        </div>
+        <ul className="col-7 nav nav-pills justify-content-end" id="orders-tab" role="tablist">
+          <li className="nav-item" role="presentation">
+            <button className="nav-link active" id="orders-pending-tab" data-bs-toggle="pill" data-bs-target="#orders-pending" type="button" role="tab" aria-controls="orders-pending" aria-selected="true">Pending</button>
+          </li>
+          <li className="nav-item" role="presentation">
+            <button className="nav-link" id="orders-completed-tab" data-bs-toggle="pill" data-bs-target="#orders-completed" type="button" role="tab" aria-controls="orders-completed" aria-selected="false">Completed</button>
+          </li>
+        </ul>
+      </div>
       <div className="tab-content" id="orders-tabContent">
         <div className="tab-pane fade show active" id="orders-pending" role="tabpanel" aria-labelledby="orders-pending-tab">
           <div className="table-responsive">
@@ -111,7 +115,7 @@ export default function Dashboard() {
                 {loading ? <tr>
                   <th colSpan={3} scope="row">Loading...</th>
                 </tr> : orders?.length > 0 ? orders.map((item, index) => {
-                  return item.status == 0 && <tr key={index} onClick={() => navigate('/order-details', {state: item})}>
+                  return item.status == 0 && <tr key={index} onClick={() => navigate('/order-details', { state: item })}>
                     <th scope="row"><div className="tokennum">{item.token_num}</div></th>
                     <td>{item.uname}</td>
                     <td>{item.mobile}</td>
@@ -135,7 +139,7 @@ export default function Dashboard() {
                 {loading ? <tr>
                   <th colSpan={3} scope="row">Loading...</th>
                 </tr> : orders?.length > 0 ? orders.map((item, index) => {
-                  return item.status == 1 && <tr key={index} onClick={() => navigate('/order-details', {state: item})}>
+                  return item.status == 1 && <tr key={index} onClick={() => navigate('/order-details', { state: item })}>
                     <th scope="row"><div className="tokennum">{item.token_num}</div></th>
                     <td>{item.uname}</td>
                     <td>{item.mobile}</td>
