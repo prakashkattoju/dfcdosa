@@ -450,10 +450,10 @@ h4 {
     font-family: 'FontAwesome';
     position: absolute;
     right: 0;
-    top: 5px;
+    top: 6px;
 }
 
-.search-form .p-calendar::after {
+/* .search-form .p-calendar::after {
     content: '';
     position: absolute;
     width: calc(100% - 10px);
@@ -461,7 +461,7 @@ h4 {
     background-color: #e9b328;
     bottom: 0;
     left: 0;
-}
+} */
 
 .search-form .p-calendar input {
     width: 100%;
@@ -495,8 +495,8 @@ h4 {
 
 
 .search-form .p-calendar button.p-datepicker-trigger svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     margin-right: auto;
 }
 
@@ -1317,9 +1317,10 @@ form.list button:hover {
 
 #orders-tab .nav-link.active {
     background-color: transparent;
+    background-color: rgba(233, 179, 40, .25);
 }
 
-#orders-tab .nav-link.active::after {
+/* #orders-tab .nav-link.active::after {
     content: '';
     position: absolute;
     width: calc(100% - 10px);
@@ -1327,7 +1328,7 @@ form.list button:hover {
     background-color: #e9b328;
     bottom: -2px;
     left: 5px;
-}
+} */
 
 #orders-tabContent .table {
     font-size: 16px;
