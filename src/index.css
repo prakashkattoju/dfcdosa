@@ -445,6 +445,13 @@ h4 {
     position: relative;
     width: 100%;
 }
+.search-form .p-calendar::before {
+    content: '\f0d7';
+    font-family: 'FontAwesome';
+    position: absolute;
+    right: 10px;
+    top: 6px;
+}
 
 .search-form .p-calendar::after {
     content: '';
