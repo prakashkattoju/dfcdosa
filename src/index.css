@@ -437,7 +437,7 @@ h4 {
 
 .search-form .p-calendar input {
     width: 100%;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 600;
     color: #e9b328;
     background-color: transparent;
@@ -1282,7 +1282,7 @@ form.list button:hover {
 
 #orders-tab .nav-link {
     position: relative;
-    font-size: 18px;
+    font-size: 16px;
     color: #e9b328;
     font-weight: 600;
 }
