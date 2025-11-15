@@ -11,6 +11,7 @@ import { getToken } from './util/Cookies'
 import { checkAndRemoveExpiredToken, fetchUserRole } from "./util/authUtils";
 import ProtectedRoute from './components/ProtectedRoute';
 import Products from "./pages/Products";
+import Categories from "./pages/Categories";
 import Bill from "./pages/Bill";
 import OrderDetails from "./pages/OrderDetails";
 
@@ -31,7 +32,7 @@ function App() {
     <Routes>
       <Route path="/" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <Login />} />
       <Route path="/admin" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <AdminLogin />} />
-      {/* <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} /> */}
+      <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
       <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
       <Route path="/cart" element={<ProtectedRoute allowedRoles={["user"]}><Cart /></ProtectedRoute>} />
