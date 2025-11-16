@@ -9,11 +9,11 @@ export default function ConfirmModal({ show, title, message, onConfirm, onConfir
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <button
+            {/* <button
               type="button"
               className="btn-close"
               onClick={onCancel}
-            ></button>
+            ></button> */}
             <h4 className="modal-title">{title || "Confirm Action"}</h4>
           </div>
           <div className="modal-body">

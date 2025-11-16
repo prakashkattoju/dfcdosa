@@ -9,11 +9,11 @@ export default function AlertModal({ show, title, message, onClose }) {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <button
+            {/* <button
               type="button"
               className="btn-close"
               onClick={onClose}
-            ></button>
+            ></button> */}
             <h4 className="modal-title">{title || "Alert"}</h4>
           </div>
           <div className="modal-body">
