@@ -39,7 +39,6 @@ export default function Cart() {
                 setLoading(true)
                 const data = await UpdateUserName(values.uname, user_id);
                 if (data.status) {
-                    handleCancel();
                     dispatch(setUserDetails({
                         ...user,
                         fullname: values.uname,
@@ -83,7 +82,6 @@ export default function Cart() {
     };
 
     const handleConfirmSubmit = async () => {
-        handleCancel();
         const cartdata = {
             total_quantity: getCartQuantity(),
             total_price: cart.reduce((total, item) => total + item.unit_price * item.quantity, 0),
@@ -93,6 +91,7 @@ export default function Cart() {
             setLoading(true)
             const data = await CreateBill(cartdata);
             if (data.status) {
+                handleCancel();
                 navigate('/bill', { state: { token_num: data.token_num } })
             }
         } catch (error) {
