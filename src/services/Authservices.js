@@ -1,8 +1,8 @@
 import axiosInstance from "../util/axiosInstance";
 
-export const verifyUser = async (uname, mobile) => {
+export const verifyUser = async (mobile) => {
     try {
-        const response = await axiosInstance.post("/users/verify/", { uname, mobile });
+        const response = await axiosInstance.post("/users/verify/", { mobile });
         return response.data;
     } catch (error) {
         // Check if error response exists and log the error message

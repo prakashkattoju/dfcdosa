@@ -18,12 +18,9 @@ export default function Login() {
   // Formik initialization
   const formik = useFormik({
     initialValues: {
-      uname: "",
       mobile: ""
     },
     validationSchema: Yup.object({
-      uname: Yup.string()
-        .required("Name is required"),
       mobile: Yup.string()
         .required("Mobile number is required")
         .matches(/^[6-9]\d{9}$/, 'Enter a valid 10-digit Mobile number'),
@@ -31,7 +28,7 @@ export default function Login() {
     onSubmit: async (values) => {
       try {
         setLoading(true)
-        const data = await verifyUser(values.uname, values.mobile);
+        const data = await verifyUser(values.mobile);
         if (data.status) {
           dispatch(setCredentials(data));
           navigate("/", { replace: true });
@@ -57,20 +54,6 @@ export default function Login() {
           <article className="page">
             <div className="entry-content">
               <form className="list" onSubmit={formik.handleSubmit}>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="uname"
-                    placeholder="Enter your name"
-                    value={formik.values.uname}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    className="form-control"
-                  />
-                  {formik.touched.uname && formik.errors.uname ? (
-                    <div className="input-error">{formik.errors.uname}</div>
-                  ) : null}
-                </div>
                 <div className="form-group">
                   <input
                     type="tel"

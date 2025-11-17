@@ -1,11 +1,13 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Navigate, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from '../store/userSlice';
 import { decodeToken } from 'react-jwt';
 import { logOut } from '../store/authSlice';
-import { GetUserByID } from '../services/Userservices';
-import Collapse from "bootstrap/js/dist/collapse";
+import { GetUserByID, UpdateUserName } from '../services/Userservices';
+import { FaSpinner } from "react-icons/fa";
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const dispatch = useDispatch();
@@ -18,6 +20,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const user_id = decodedToken?.user_id;
   const user_role = decodedToken?.user_role;
   const [showMenu, setShowMenu] = useState(false)
+
+  const [showPromptModal, setShowPromptModal] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const fetchuser = useCallback(async () => {
     try {
@@ -64,6 +69,39 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
   const user = useSelector((state) => state.user);
 
+  useEffect(() => {
+    user.fullname === "" && setShowPromptModal(true)
+  }, [user]);
+
+  // Formik initialization
+  const formik = useFormik({
+    initialValues: {
+      uname: ""
+    },
+    validationSchema: Yup.object({
+      uname: Yup.string()
+        .required("Name is required")
+    }),
+    onSubmit: async (values) => {
+      try {
+        setLoading(true)
+        const data = await UpdateUserName(values.uname, user_id);
+        if (data.status) {
+          document.activeElement?.blur();
+          setShowPromptModal(false)
+          dispatch(setUserDetails({
+            ...user,
+            fullname: values.uname,
+          }))
+        }
+      } catch (error) {
+        console.error("Error", error)
+      } finally {
+        setLoading(false)
+      }
+    },
+  });
+
   if (!isLoggedIn) {
     return <Navigate to="/" />;
   }
@@ -77,7 +115,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
       {((user_role === "user" && location.pathname !== "/bill") || user_role === "admin") && <header className="site-header">
         <div className='site-header-top'>
-          {user_role === "user" && <div className='navbar navbar-expand-lg d-flex gap-2 justify-content-start' onClick={backBtn}>{location.pathname === "/" ? <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z"/></svg></div> : <><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>Back</>}</div>}
+          {user_role === "user" && <div className='navbar navbar-expand-lg d-flex gap-2 justify-content-start' onClick={backBtn}>{location.pathname === "/" ? <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" /></svg></div> : <><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>Back</>}</div>}
 
           <div className="site-branding">
             <Link to="/"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
@@ -85,8 +123,8 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
           <div className='navi d-flex gap-2 justify-content-end align-items-center'>
             {user_role === "admin" ? <>
-              <span className='d-flex gap-2 justify-content-end align-items-center'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z" /></svg> {user.fullname}</span><span>|</span><span onClick={() => setShowMenu(!showMenu)} type="button" role="tab"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></span></> :
-            <span onClick={logoutAccount} className='d-flex gap-2 justify-content-end align-items-center'>Exit<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>}
+              <span className='d-flex gap-2 justify-content-end align-items-center'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z" /></svg> {user.fullname}</span><span>|</span><span onClick={() => setShowMenu(!showMenu)} type="button" role="tab"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" /></svg></span></> :
+              <span onClick={logoutAccount} className='d-flex gap-2 justify-content-end align-items-center'>Exit<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></span>}
 
           </div>
         </div>
@@ -117,6 +155,37 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
           </div>
         </article>
       </main>
+      <div
+        className={`dfc-modal modal fade ${showPromptModal ? "show d-flex" : ""}`}
+        id="PromptModal"
+        tabIndex="-1"
+      >
+        <div className="modal-dialog">
+          <form className="modal-content" onSubmit={formik.handleSubmit}>
+            <div className="modal-header">
+              <h4 className="modal-title">Your Name</h4>
+            </div>
+            <div className="modal-body">
+              <div className="form-group">
+                <input
+                  name="uname"
+                  placeholder="Enter your name to submit"
+                  value={formik.values.uname}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-control"
+                />
+                {formik.touched.uname && formik.errors.uname ? (
+                  <div className="input-error">{formik.errors.uname}</div>
+                ) : null}
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="submit" className="btn"> {loading && <FaSpinner className="animate-spin" />} Submit </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
