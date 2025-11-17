@@ -47,8 +47,6 @@ export default function Cart() {
                 }
             } catch (error) {
                 console.error("Error", error)
-            } finally {
-                setLoading(false)
             }
         },
     });
@@ -82,13 +80,13 @@ export default function Cart() {
     };
 
     const handleConfirmSubmit = async () => {
+        setLoading(true)
         const cartdata = {
             total_quantity: getCartQuantity(),
             total_price: cart.reduce((total, item) => total + item.unit_price * item.quantity, 0),
             items: cart
         };
         try {
-            setLoading(true)
             const data = await CreateBill(cartdata);
             if (data.status) {
                 handleCancel();
