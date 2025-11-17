@@ -853,6 +853,11 @@ form.list button:hover {
     border-top: 1px solid #9a7414;
 }
 
+.list .item-list.categories .item:first-child{
+    border-top: 0;
+    padding-top: 0;
+}
+
 .list .item-list .item h2 {
     font-size: 14px;
     margin-top: 0;

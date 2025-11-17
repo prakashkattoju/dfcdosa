@@ -78,7 +78,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
 
       {((user_role === "user" && location.pathname !== "/bill") || (user_role === "admin" && location.pathname !== "/order-details")) && <header className="site-header">
         <div className='site-header-top'>
-          {user_role === "user" ? <div className='navbar navbar-expand-lg d-flex gap-2 justify-content-start' onClick={backBtn}>{location.pathname === "/" ? <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" /></svg></div> : <><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>Back</>}</div> : <div onClick={() => setShowMenu(!showMenu)} type="button" role="tab"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">{!showMenu ? <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" /> : <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>}</svg></div>}
+          {user_role === "user" ? <div role="button" className='navbar navbar-expand-lg d-flex gap-2 justify-content-start' onClick={backBtn}>{location.pathname === "/" ? <div><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" /></svg></div> : <><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>Back</>}</div> : <div role="button" onClick={() => setShowMenu(!showMenu)}  ><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">{!showMenu ? <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" /> : <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/>}</svg></div>}
 
           <div className="site-branding">
             <Link to="/"><img src="Logo.png" alt="Dosa Filling Centre" /></Link>
@@ -102,9 +102,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname === '/products' && 'active'}`} to="/products">Products</Link>
           </li>
-          {/* <li className="nav-item">
+          <li className="nav-item">
             <Link className={`nav-link ${location.pathname === '/categories' && 'active'}`} to="/categories">Categories</Link>
-          </li> */}
+          </li>
         </ul>}
       </header>}
 
