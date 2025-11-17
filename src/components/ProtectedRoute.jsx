@@ -51,10 +51,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   const closeMenu = () => {
-    setShowMenu(!showMenu)
     const menu = document.getElementById("mobileMenu");
-
     if (menu && menu.classList.contains("show")) {
+      setShowMenu(false)
       menu.classList.remove("show");
     }
   };
