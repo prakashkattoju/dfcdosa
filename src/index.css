@@ -326,7 +326,7 @@ h4 {
     margin: 0;
 }
 
-.inner.dashboard .navbar-nav{
+.inner.dashboard .navbar-nav {
     display: none;
     border-bottom: 1px solid;
     flex-direction: row;
@@ -336,10 +336,12 @@ h4 {
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
-.inner.dashboard .navbar-nav.order-details{
+
+.inner.dashboard .navbar-nav.order-details {
     justify-content: flex-end;
 }
-.inner.dashboard .navbar-nav.order-details .order-opt{
+
+.inner.dashboard .navbar-nav.order-details .order-opt {
     width: auto;
     color: #252525;
     background-color: #e9b328;
@@ -353,11 +355,12 @@ h4 {
     border-radius: 3px;
     padding: 8px 12px;
 }
-.inner.dashboard .navbar-nav.show{
+
+.inner.dashboard .navbar-nav.show {
     display: flex;
 }
 
-.inner.dashboard .navbar-nav .nav-link{
+.inner.dashboard .navbar-nav .nav-link {
     display: block;
     padding: 10px 12px;
     text-transform: uppercase;
@@ -444,6 +447,7 @@ h4 {
     position: relative;
     width: 100%;
 }
+
 .search-form .p-calendar::before {
     content: '\f0d7';
     font-family: 'FontAwesome';
@@ -779,7 +783,7 @@ form.list button:hover {
     display: block;
 }
 
-.list .item-list .sub-category-list {
+/* .list .item-list .sub-category-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -787,15 +791,31 @@ form.list button:hover {
     padding-bottom: 15px;
     margin-bottom: 0;
     border-bottom: 1px dashed #9a7414;
+} */
+
+.list .item-list .sub-category-list {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    /* smooth scroll */
+    padding-bottom: 15px;
+    margin-bottom: 0;
+    border-bottom: 1px dashed #9a7414;
 }
 
 .list .item-list .sub-category-list .item-category {
-    display: block;
+    display: inline-block;
     text-align: center;
     border-color: #8e8d8a;
     color: #8e8d8a;
     padding: 6px 15px;
-    width: calc(50% - 5px);
+    width: auto;
+    white-space: nowrap;
+    margin-right: 15px;
+}
+.list .item-list .sub-category-list .item-category:last-child {
+    margin-right: 0;
 }
 
 .list .item-list a.item-category>span {
@@ -1243,13 +1263,14 @@ form.list button:hover {
     padding: 0 15px 15px;
     gap: 10px;
 }
-.dfc-modal .modal-content .modal-footer > *{
+
+.dfc-modal .modal-content .modal-footer>* {
     margin: 0;
 }
 
 .dfc-modal .modal-content .modal-header .modal-title {
-    font-size: 24px;
-    width: 80%;
+    font-size: 21px;
+    width: 100%;
 }
 
 .dfc-modal .modal-header:after {
