@@ -97,7 +97,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
         </div>}
         {(user_role === "admin" && location.pathname !== '/order-details') && <ul id="mobileMenu" className={`navbar-nav ms-auto ${showMenu && 'show'}`}>
           <li className="nav-item">
-            <Link className={`nav-link ${location.pathname === '/' && 'active'}`} to="/">Orders</Link>
+            <Link className={`nav-link ${location.pathname === '/orders' && 'active'}`} to="/orders">Orders</Link>
           </li>
           <li className="nav-item">
             <Link className={`nav-link ${location.pathname === '/products' && 'active'}`} to="/products">Products</Link>

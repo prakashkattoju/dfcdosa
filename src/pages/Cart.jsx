@@ -89,7 +89,7 @@ export default function Cart() {
         try {
             const data = await CreateBill(cartdata);
             if (data.status) {
-                handleCancel();
+                //handleCancel();
                 navigate('/bill', { state: { token_num: data.token_num } })
             }
         } catch (error) {

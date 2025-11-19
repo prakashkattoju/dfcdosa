@@ -31,10 +31,14 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <Login />} />
+
       <Route path="/admin" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <AdminLogin />} />
+
+      <Route path="/orders" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
+      <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
       <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
-      <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
+      
       <Route path="/cart" element={<ProtectedRoute allowedRoles={["user"]}><Cart /></ProtectedRoute>} />
       <Route path="/bill" element={<ProtectedRoute allowedRoles={["user"]}><Bill /> </ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
