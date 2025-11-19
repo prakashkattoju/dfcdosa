@@ -33,7 +33,7 @@ export default function AdminLogin() {
         const data = await verifyAdmin(values.uname, values.password);
         if (data.status) {
           dispatch(setCredentials(data));
-          navigate("/orders", { replace: true });
+          navigate("/", { replace: true });
           window.location.reload(true);
         }
       } catch (error) {

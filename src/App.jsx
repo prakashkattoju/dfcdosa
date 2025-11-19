@@ -34,7 +34,6 @@ function App() {
 
       <Route path="/admin" element={isLoggedIn ? user_role === "admin" ? <ProtectedRoute><Dashboard /></ProtectedRoute> : <ProtectedRoute><Home /></ProtectedRoute> : <AdminLogin />} />
 
-      <Route path="/orders" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
       <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
       <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
