@@ -305,7 +305,7 @@ h4 {
     align-items: center;
     justify-content: flex-start;
     gap: 15px;
-    padding: 15px;
+    padding: 10px 15px;
     border-bottom: 1px solid;
 }
 
@@ -357,7 +357,11 @@ h4 {
 }
 
 .inner.dashboard .navbar-nav.order-details {
+    display: flex;
+    flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
 }
 
 .inner.dashboard .navbar-nav.order-details .order-opt {
@@ -402,6 +406,11 @@ h4 {
 
 .dashboard .search-form {
     padding: 10px 15px 0;
+}
+
+.dashboard .search-form.orders{
+    padding: 10px 15px;
+    border-bottom: 1px solid;
 }
 
 .form-group {

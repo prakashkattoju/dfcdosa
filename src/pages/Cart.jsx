@@ -157,33 +157,62 @@ export default function Cart() {
             </div>} */}
             {cart.length > 0 ?
                 <>
-                    <div className="cart-summary-review">
-                        <div className="tbl-cart show-cart">
-                            <div>
-                                {cart.map((item, index) => <div key={index} className="cart-item">
-                                    <div className="cart-trow">
-                                        <div className="pname">{item.title}</div>
-                                    </div>
-                                    <div className="cart-brow">
-                                        <div className="input-group">
-                                            <div className="pprice">{priceDisplay(parseInt(item.unit_price)).replace("₹", "")}</div>
-                                            <div className="opt">
-                                                <button className="minus-item" onClick={() => decrement(item.product_id)}><i className="fa-solid fa-minus"></i></button>
-                                                <div className="qty">{getQuantity(parseInt(item.product_id))}</div>
-                                                <button className="plus-item" onClick={() => increment(item.product_id)}><i className="fa-solid fa-plus"></i></button>
+                    <div className="list scroll">
+                        <div className="item-list">
+                            {cart.map((item, index) => <div key={index} className="item">
+                                <div className='item-inner'>
+                                    <div className="meta">
+                                        <h2>{item.title}</h2>
+                                        <div className="meta-inner">
+                                            <div className="meta-info">
+                                                <div className="price">{priceDisplay(parseInt(item.unit_price)).replace("₹", "")}</div>
+                                                <span className="itemid"># {item.product_id}</span>
                                             </div>
-                                            <div>{getCartItemsAmount(item).replace("₹", "")}</div>
+                                            <div className="cart-action">
+                                                <div className="opt">
+                                                    <button className="minus-item" onClick={() => decrement(item.product_id)}><i className="fa-solid fa-minus"></i></button>
+                                                    <div className="qty">{getQuantity(parseInt(item.product_id))}</div>
+                                                    <button className="plus-item" onClick={() => increment(item.product_id)}><i className="fa-solid fa-plus"></i></button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>)}
+                                </div>
+                            </div>)}
+                            <div className="item">
+                                <div className='item-inner'>
+                                    <div className="meta">
+                                        <div className="meta-inner">
+                                            <div>No. Items</div>
+                                            <div>{getCartQuantity()}</div>
+                                        </div>
+                                    </div>
+                                    <>|</>
+                                    <div className="meta">
+                                        <div className="meta-inner">
+                                            <div>Subtotal</div>
+                                            <div>{getCartAmount()}</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            {/* <div className="cart-summary">
-                            <div className="noitems">No. Items: {getCartQuantity()}</div>
-                            <div className="ftotal">{getCartAmount()}</div> 
-                        </div> */}
-                            <div className="addmore"><p>If you want add more items.</p><button type="button" className="btn toggle" onClick={() => navigate("/", { replace: true })}>Add More</button></div>
+                            <div className="item">
+                                <div className='item-inner'>
+                                    <div className="meta">
+                                        <div className="meta-inner">
+                                            <div className="meta-info">
+                                                <div className="price">Total</div>
+                                            </div>
+                                            <div className="meta-info">
+                                                <div className="price text-end">{getCartAmount()}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div className="addmore"><p>If you want add more items.</p><button type="button" className="btn toggle" onClick={() => navigate("/", { replace: true })}>Add More</button></div>
                     <div className="cart-summary-badge">
                         <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
                         <div className="continue">

@@ -224,37 +224,36 @@ export default function Home() {
                     {/* activeCategory !== null && <div className="list sub-categories">
                         {subCategories.length > 0 && subCategories.map((item, index) => item.status === "1" && <div onClick={() => setSubCategoryResultsFunc(item.sub_cat_id)} key={index} className={`sub-category ${item.sub_cat_id === activeSubCategory && 'active'}`}>{item.title}</div>)}
                     </div> */}
-                    <div style={{ height: `calc(100dvh - ${cart.length > 0 ? (height + 64) : height}px)` }} className="list scroll">{searchResults.length > 0 ? <PerfectScrollbar options={{ suppressScrollX: true, wheelPropagation: false }} className="item-list">{
-                        searchResults.map((item, index) => <div key={index} className="item">
-                            <div className='item-inner'>
-                                {/* <div className="img"><img width="100" height="100" src="/dosa.webp" alt={item.title} /></div> */}
-                                <div className="meta">
-                                    <h2>{item.title}</h2>
-                                    <div className="meta-inner">
-                                        <div className="meta-info">
-                                            <div className="price">{priceDisplay(parseInt(item.unit_price))}</div>
-                                            <span className="itemid"># {item.product_id}</span>
-                                        </div>
-                                        <div className="cart-action">
-                                            {checkForAdd(parseInt(item.product_id)) ?
-                                                (<div className="opt">
-                                                    <button className="minus" onClick={() => decrement(parseInt(item.product_id))}><i className="fa-solid fa-minus"></i></button>
-                                                    <div className="qty">{getQuantity(parseInt(item.product_id))}</div>
-                                                    <button className="plus" onClick={() => increment(parseInt(item.product_id))}><i className="fa-solid fa-plus"></i></button>
-                                                </div>) :
-                                                <button className="btnAddAction init" onClick={() => addOptToCart({
-                                                    'product_id': parseInt(item.product_id),
-                                                    'title': item.title,
-                                                    'unit_price': parseInt(item.unit_price),
-                                                })}>Add <i className="fa-solid fa-plus"></i></button>}
+                    <div style={{ height: `calc(100dvh - ${cart.length > 0 ? (height + 64) : height}px)` }} className="list scroll">{searchResults.length > 0 ?
+                        <PerfectScrollbar options={{ suppressScrollX: true, wheelPropagation: false }} className="item-list">{
+                            searchResults.map((item, index) => <div key={index} className="item">
+                                <div className='item-inner'>
+                                    {/* <div className="img"><img width="100" height="100" src="/dosa.webp" alt={item.title} /></div> */}
+                                    <div className="meta">
+                                        <h2>{item.title}</h2>
+                                        <div className="meta-inner">
+                                            <div className="meta-info">
+                                                <div className="price">{priceDisplay(parseInt(item.unit_price))}</div>
+                                                <span className="itemid"># {item.product_id}</span>
+                                            </div>
+                                            <div className="cart-action">
+                                                {checkForAdd(parseInt(item.product_id)) ?
+                                                    (<div className="opt">
+                                                        <button className="minus" onClick={() => decrement(parseInt(item.product_id))}><i className="fa-solid fa-minus"></i></button>
+                                                        <div className="qty">{getQuantity(parseInt(item.product_id))}</div>
+                                                        <button className="plus" onClick={() => increment(parseInt(item.product_id))}><i className="fa-solid fa-plus"></i></button>
+                                                    </div>) :
+                                                    <button className="btnAddAction init" onClick={() => addOptToCart({
+                                                        'product_id': parseInt(item.product_id),
+                                                        'title': item.title,
+                                                        'unit_price': parseInt(item.unit_price),
+                                                    })}>Add <i className="fa-solid fa-plus"></i></button>}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>)
-                    }</PerfectScrollbar> : categories.length > 0 ? categories.map((item, index) => item.status === "1" && <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
-                    </div>) : <p className='text-center'>No Dosa Categories</p>
-                    }
+                            </div>)}
+                        </PerfectScrollbar> : <p className='text-center'>No Dosa Categories</p>}
                     </div></>}
             </>
             {cart.length > 0 && <div className="cart-summary-badge">

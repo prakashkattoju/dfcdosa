@@ -67,7 +67,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="search-form">
+      <div className="search-form orders">
         <div className="form-group d-flex gap-2">
           <input className="form-control" type="number" value={activeToken} onChange={(e) => setActiveToken(e.target.value)} placeholder="Token..." autoComplete="off" />
           <input className="form-control" type="number" value={activeMobile} onChange={(e) => setActiveMobile(e.target.value)} placeholder="Mobile..." autoComplete="off" maxLength={10} />
