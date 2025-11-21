@@ -74,31 +74,33 @@ export default function Dashboard() {
           {!searchActive ? <button disabled={activeMobile === "" && activeToken === ""} onClick={() => handleSearch()} type='button' className='form-control btn'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" /></svg></button> : <button onClick={() => handleSearchCancel()} type='button' className='form-control btn'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></svg></button>}
         </div>
       </div>
-      <div className='row justify-content-between align-items-center mb-3'>
-        <div className="col-5 search-form mb-0">
-          <div className="form-group">
-            <Calendar
-              value={activeDate}
-              onChange={(e) => setActiveDate(e.value)}
-              className="active-date"
-              inputClassName="form-control"
-              panelClassName="active-date-panel"
-              placeholder="Selecct Date"
-              showIcon
-              maxDate={new Date()}
-              readOnlyInput={true}
-              dateFormat="dd-M-yy"
-            />
+      <div className='container my-2'>
+        <div className='row justify-content-between align-items-center'>
+          <div className="col-5 mb-0">
+            <div className="form-group">
+              <Calendar
+                value={activeDate}
+                onChange={(e) => setActiveDate(e.value)}
+                className="active-date"
+                inputClassName="form-control"
+                panelClassName="active-date-panel"
+                placeholder="Selecct Date"
+                showIcon
+                maxDate={new Date()}
+                readOnlyInput={true}
+                dateFormat="dd-M-yy"
+              />
+            </div>
           </div>
+          <ul className="col-7 nav nav-pills justify-content-end" id="orders-tab" role="tablist">
+            <li className="nav-item" role="presentation">
+              <button className="nav-link active" id="orders-pending-tab" data-bs-toggle="pill" data-bs-target="#orders-pending" type="button" role="tab" aria-controls="orders-pending" aria-selected="true">Pending</button>
+            </li>
+            <li className="nav-item" role="presentation">
+              <button className="nav-link" id="orders-completed-tab" data-bs-toggle="pill" data-bs-target="#orders-completed" type="button" role="tab" aria-controls="orders-completed" aria-selected="false">Completed</button>
+            </li>
+          </ul>
         </div>
-        <ul className="col-7 nav nav-pills justify-content-end" id="orders-tab" role="tablist">
-          <li className="nav-item" role="presentation">
-            <button className="nav-link active" id="orders-pending-tab" data-bs-toggle="pill" data-bs-target="#orders-pending" type="button" role="tab" aria-controls="orders-pending" aria-selected="true">Pending</button>
-          </li>
-          <li className="nav-item" role="presentation">
-            <button className="nav-link" id="orders-completed-tab" data-bs-toggle="pill" data-bs-target="#orders-completed" type="button" role="tab" aria-controls="orders-completed" aria-selected="false">Completed</button>
-          </li>
-        </ul>
       </div>
       <div className="tab-content" id="orders-tabContent">
         <div className="tab-pane fade show active" id="orders-pending" role="tabpanel" aria-labelledby="orders-pending-tab">

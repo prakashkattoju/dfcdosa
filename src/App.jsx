@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
 import AdminLogin from "./pages/AdminLogin";
 import Home from "./pages/Home";
@@ -17,16 +17,21 @@ import OrderDetails from "./pages/OrderDetails";
 
 function App() {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
   const token = getToken();
   const isLoggedIn = token && checkAndRemoveExpiredToken(token);
   const user_role = fetchUserRole(token)
 
-  useEffect(() => {
+  const checkToken = () => {
     if (isLoggedIn) {
-      //console.log("Already Logged In ", token);
       dispatch(setCredentials({ token }));
     }
-  }, [dispatch, isLoggedIn]);
+  };
+
+  useEffect(() => {
+    checkToken()
+  }, [location]);
 
   return (
     <Routes>
@@ -38,7 +43,7 @@ function App() {
       <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
       <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
-      
+
       <Route path="/cart" element={<ProtectedRoute allowedRoles={["user"]}><Cart /></ProtectedRoute>} />
       <Route path="/bill" element={<ProtectedRoute allowedRoles={["user"]}><Bill /> </ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />

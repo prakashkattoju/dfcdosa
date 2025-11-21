@@ -1,15 +1,21 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { GetProducts, GetCategories } from '../services/Productsservices';
 import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
+import { setUserDetails } from '../store/userSlice';
+import { logOut } from '../store/authSlice';
 import { addToCart, incrementQuantity, decrementQuantity } from '../store/cartSlice';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-perfect-scrollbar/dist/css/styles.css";
+import ConfirmModal from '../components/ConfirmModal';
 
 export default function Home() {
 
     const cart = useSelector((state) => state.cart.cart);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -17,9 +23,27 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const [notFound, setNotFound] = useState(false);
-    const [queryString, setQueryString] = useState('');
+    const [queryString, setQueryString] = useState(location.state ? location.state.queryString : '');
     const [activeCategory, setActiveCategory] = useState(null);
     const [activeSubCategory, setActiveSubCategory] = useState(null);
+
+    const headerRef = useRef(null);
+    const [height, setHeaderHeight] = useState(0);
+
+    const [showConfirm, setShowConfirm] = useState(false);
+
+    useEffect(() => {
+        const updateHeight = () => {
+            if (headerRef.current) {
+                setHeaderHeight(headerRef.current.offsetHeight);
+            }
+        };
+
+        updateHeight();
+        window.addEventListener("resize", updateHeight);
+
+        return () => window.removeEventListener("resize", updateHeight);
+    }, []);
 
     const fetchproducts = useCallback(async () => {
         try {
@@ -36,8 +60,23 @@ export default function Home() {
     const fetchcategories = useCallback(async () => {
         setLoading(true)
         try {
+
+            const productsdata = await GetProducts();
+            const products = productsdata.filter((item) => item.status == 1);
             const categoriesdata = await GetCategories();
-            setCategories(categoriesdata);
+            const statusData = categoriesdata.filter((item) => item.status == 1);
+            setCategories(statusData);
+
+            const category_id = statusData[0].category_id
+
+            const categoryObj = statusData.find((item) => item?.category_id === category_id);
+            setSubCategories(categoryObj.sub_cats)
+
+            const filteredData = products.filter((item) => item.category_id === category_id);
+
+            filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+            filteredData.length > 0 && setActiveCategory(category_id)
+
         } catch (error) {
             console.error("Failed to fetch categories:", error);
         } finally {
@@ -50,7 +89,11 @@ export default function Home() {
         fetchcategories();
     }, [fetchproducts, fetchcategories]);
 
-    //console.log("categories", categories)
+    //console.log("searchResults", searchResults)
+
+    const backBtn = () => {
+        navigate('/')
+    }
 
     const setSearchResultsFunc = (text) => {
         if (text === '') {
@@ -81,7 +124,7 @@ export default function Home() {
 
     const setCategoryResultsFunc = (category_id) => {
 
-        const categoryObj = categories.find((item) => item.category_id == category_id);
+        const categoryObj = categories.find((item) => item?.category_id === category_id);
         setSubCategories(categoryObj.sub_cats)
 
         const filteredData = products.filter((item) => {
@@ -106,20 +149,6 @@ export default function Home() {
             setNotFound(false)
         }
         setQueryString('')
-    }
-
-    const clearCategorySearch = () => {
-        if (queryString === "") {
-            setSearchResults([])
-            setNotFound(false)
-        }
-        setActiveCategory(null)
-        setActiveSubCategory(null)
-    }
-
-    const getCategoryTitle = (activeCategory) => {
-        const category = categories.find(el => el.category_id == activeCategory);
-        return category.title;
     }
 
     const checkForAdd = (product_id) => {
@@ -149,28 +178,56 @@ export default function Home() {
         dispatch(incrementQuantity(product_id));
     }
 
+    const logoutAccount = () => {
+        dispatch(logOut()); // Dispatch the logout action to clear user state
+        dispatch(setUserDetails({
+            fullname: null,
+            mobile: null
+        }))
+        navigate("/", { replace: true }); // Redirect the user to the login page after logging out
+        window.location.reload(true);
+    };
+
+    const handleCancel = () => {
+        document.activeElement?.blur();
+        setShowConfirm(false);
+    };
+
     return (
         <>
-            <div className="menu-items">
-                <div className="search-form">
-                    <div className="form-group">
-                        <input className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
-                        {((searchResults.length > 0 || notFound) && queryString !== "") && <span className='clear-search' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
+            <header ref={headerRef} className="site-header">
+                <div className='search-area d-flex gap-2 align-items-center justify-content-between'>
+                    <div role='button' onClick={backBtn}>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" /></svg>
                     </div>
+                    <div className="search-form">
+                        <div className="form-group">
+                            <input className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
+                            {((searchResults.length > 0 || notFound) && queryString !== "") ? <span className='search-icon' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span> : <span className='search-icon'><i className="fa-solid fa-search"></i></span>}
+                        </div>
+                    </div>
+                    <div onClick={() => setShowConfirm(true)} className='p-1'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></div>
                 </div>
-                {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <>
-                    {activeCategory !== null && <div className="list sticky"><div className="item-category active" onClick={clearCategorySearch}><span><span>{getCategoryTitle(activeCategory)}</span><span className='clear-search'><i className="fa-solid fa-xmark"></i></span></span>
+                {categories.length > 0 ? <div className="scroll-categories">
+                    {categories.map((item, index) => item.status === "1" && <div key={index} className={`category ${activeCategory === item.category_id ? "active" : ""}`} onClick={() => setCategoryResultsFunc(item.category_id)}><img className='img' width="100" height="100" src="/dosa.webp" alt={item.title} /><span className='text'>{item.title}</span>
+                    </div>)
+                    }
+                </div> : <div className="scroll-categories">{Array.from({ length: 5 }).map((_, i) => (
+                    <div className="category" key={i}>
+                        <div className="skeleton img"></div>
+                        <div className="skeleton text"></div>
                     </div>
-                        {subCategories.length > 0 && <div className="item-list">
-                            <div className='sub-category-list'>
-                                {subCategories.map((item, index) => item.status === "1" && <div onClick={() => setSubCategoryResultsFunc(item.sub_cat_id)} key={index} className={`item-category sub-category ${item.sub_cat_id === activeSubCategory && 'active'}`}>{item.title}</div>)}
-                            </div>
-                        </div>}
-                    </div>}
-                    <div className="list">{searchResults.length > 0 ? <div className="item-list">{
+                ))}</div>}
+            </header>
+            <>
+                {loading ? <div className="list"><div className='loading'>Loading...</div></div> : <>
+                    {/* activeCategory !== null && <div className="list sub-categories">
+                        {subCategories.length > 0 && subCategories.map((item, index) => item.status === "1" && <div onClick={() => setSubCategoryResultsFunc(item.sub_cat_id)} key={index} className={`sub-category ${item.sub_cat_id === activeSubCategory && 'active'}`}>{item.title}</div>)}
+                    </div> */}
+                    <div style={{ height: `calc(100dvh - ${cart.length > 0 ? (height + 64) : height}px)` }} className="list scroll">{searchResults.length > 0 ? <PerfectScrollbar options={{ suppressScrollX: true, wheelPropagation: false }} className="item-list">{
                         searchResults.map((item, index) => <div key={index} className="item">
                             <div className='item-inner'>
-                                <div className="img"><img width="100" height="100" src="/dosa.webp" alt={item.title} /></div>
+                                {/* <div className="img"><img width="100" height="100" src="/dosa.webp" alt={item.title} /></div> */}
                                 <div className="meta">
                                     <h2>{item.title}</h2>
                                     <div className="meta-inner">
@@ -195,17 +252,26 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>)
-                    }</div> : categories.length > 0 ? categories.map((item, index) => item.status === "1" && <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
+                    }</PerfectScrollbar> : categories.length > 0 ? categories.map((item, index) => item.status === "1" && <div key={index} className="item-category" onClick={() => setCategoryResultsFunc(item.category_id)}><span><span>{item.title}</span><i className="fa-solid fa-chevron-right"></i></span>
                     </div>) : <p className='text-center'>No Dosa Categories</p>
                     }
                     </div></>}
-            </div>
+            </>
             {cart.length > 0 && <div className="cart-summary-badge">
                 <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
                 <div className="continue">
                     <button className="btn toggle" onClick={() => navigate("/cart", { replace: true })}>Continue</button>
                 </div>
             </div>}
+
+            <ConfirmModal
+                show={showConfirm}
+                title="Exit!"
+                message={`Are you sure you want to exit?`}
+                onConfirm={() => logoutAccount()}
+                onConfirmLabel="Yes"
+                onCancel={handleCancel}
+            />
         </>
     )
 }

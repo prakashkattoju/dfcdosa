@@ -5,11 +5,13 @@ import priceDisplay from '../util/priceDisplay';
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementQuantity, decrementQuantity } from '../store/cartSlice';
 import { setUserDetails } from '../store/userSlice';
+import { logOut } from '../store/authSlice';
 //import { verifyCartItems } from '../store/cartThunks';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { decodeToken } from 'react-jwt';
 import { CreateBill } from '../services/Billservices';
 import { UpdateUserName } from '../services/Userservices';
+import ConfirmModal from '../components/ConfirmModal';
 
 import { FaSpinner } from "react-icons/fa";
 
@@ -24,6 +26,12 @@ export default function Cart() {
     const user_id = decodedToken?.user_id;
     const [loading, setLoading] = useState(false);
     const [showPromptModal, setShowPromptModal] = useState(false)
+
+    const [showConfirm, setShowConfirm] = useState(false);
+
+    const backBtn = () => {
+        navigate('/')
+    }
 
     // Formik initialization
     const formik = useFormik({
@@ -99,8 +107,44 @@ export default function Cart() {
         }
     }
 
-    return (
-        loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <>
+    const setSearchResultsFunc = (text) => {
+        if (text !== '') {
+            navigate('/', { state: { queryString: text } })
+        }
+    }
+
+    const logoutAccount = () => {
+        dispatch(logOut()); // Dispatch the logout action to clear user state
+        dispatch(setUserDetails({
+            fullname: null,
+            mobile: null
+        }))
+        navigate("/", { replace: true }); // Redirect the user to the login page after logging out
+        window.location.reload(true);
+    };
+
+    const handleExitCancel = () => {
+        document.activeElement?.blur();
+        setShowConfirm(false);
+    };
+
+    return (<>
+        <header className="site-header">
+            <div className='search-area d-flex gap-2 align-items-center justify-content-between'>
+                <div role='button' onClick={backBtn}>
+                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>
+                </div>
+                <div className="search-form">
+                    <div className="form-group">
+                        <input className="form-control" type="text" value="" onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
+                        <span className='search-icon'><i className="fa-solid fa-search"></i></span>
+                    </div>
+                </div>
+                <div onClick={() => setShowConfirm(true)} className='p-1'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></div>
+            </div>
+        </header>
+
+        {loading ? <div className="list"><p className='text-center'>Loading...</p></div> : <div>
             {/* {removedItems.length > 0 && <div className="cart-summary-review removed">
                 <h3>Sorry, the below item(s) are not available</h3>
                 <div className="tbl-cart show-cart">
@@ -206,6 +250,15 @@ export default function Cart() {
                         </div>}
                 </div>
             </div>
-        </>
+            <ConfirmModal
+                show={showConfirm}
+                title="Exit!"
+                message={`Are you sure you want to exit?`}
+                onConfirm={() => logoutAccount()}
+                onConfirmLabel="Yes"
+                onCancel={handleExitCancel}
+            />
+        </div>}
+    </>
     )
 }
