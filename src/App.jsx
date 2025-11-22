@@ -14,6 +14,7 @@ import Products from "./pages/Products";
 import Categories from "./pages/Categories";
 import Bill from "./pages/Bill";
 import OrderDetails from "./pages/OrderDetails";
+import Groceries from "./pages/Groceries";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
       <Route path="/orders" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
       <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
       <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
+      <Route path="/groceries" element={<ProtectedRoute allowedRoles={["admin"]}><Groceries /></ProtectedRoute>} />
       <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
 
       <Route path="/cart" element={<ProtectedRoute allowedRoles={["user"]}><Cart /></ProtectedRoute>} />

@@ -22,12 +22,14 @@ export default function Home() {
     const [subCategories, setSubCategories] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
+    const [categoryResults, setCategoryResults] = useState([]);
     const [notFound, setNotFound] = useState(false);
     const [queryString, setQueryString] = useState(location.state ? location.state.queryString : '');
     const [activeCategory, setActiveCategory] = useState(null);
     const [activeSubCategory, setActiveSubCategory] = useState(null);
 
     const headerRef = useRef(null);
+    const searchInputRef = useRef(null);
     const [height, setHeaderHeight] = useState(0);
 
     const [showConfirm, setShowConfirm] = useState(false);
@@ -74,7 +76,7 @@ export default function Home() {
 
             const filteredData = products.filter((item) => item.category_id === category_id);
 
-            filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+            filteredData.length > 0 ? setCategoryResults(filteredData) : setNotFound(true)
             filteredData.length > 0 && setActiveCategory(category_id)
 
         } catch (error) {
@@ -96,33 +98,29 @@ export default function Home() {
     }
 
     const setSearchResultsFunc = (text) => {
-        if (text === '') {
-            if (activeCategory === null) {
-                setSearchResults([])
-                setNotFound(false)
-            } else {
-                const filteredData = products.filter((item) => {
-                    return item.category_id === activeCategory;
-                });
-                filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
-            }
+        if (text !== '') {
+            const filteredData = products.filter((item) => {
+                return item.title.toLowerCase().includes(text.toLowerCase());
+            });
+            filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
         } else {
-            if (activeCategory === null) {
-                const filteredData = products.filter((item) => {
-                    return item.title.toLowerCase().includes(text.toLowerCase());
-                });
-                filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
-            } else {
-                const filteredData = searchResults.filter((item) => {
-                    return item.title.toLowerCase().includes(text.toLowerCase());
-                });
-                filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
-            }
+            setSearchResults(categoryResults)
         }
         setQueryString(text)
     }
 
+    /* useEffect(() => {
+        // Only focus if there's an existing search term
+        if (queryString !== "" && searchInputRef.current) {
+            searchInputRef.current?.focus();
+        }
+        setSearchResultsFunc(queryString)
+    }, [location.pathname]); */
+
     const setCategoryResultsFunc = (category_id) => {
+
+        setQueryString('')
+        setSearchResults([])
 
         const categoryObj = categories.find((item) => item?.category_id === category_id);
         setSubCategories(categoryObj.sub_cats)
@@ -130,7 +128,7 @@ export default function Home() {
         const filteredData = products.filter((item) => {
             return item.category_id === category_id;
         });
-        filteredData.length > 0 ? setSearchResults(filteredData) : setNotFound(true)
+        filteredData.length > 0 ? setCategoryResults(filteredData) : setNotFound(true)
         filteredData.length > 0 && setActiveCategory(category_id)
     }
 
@@ -144,10 +142,7 @@ export default function Home() {
     }
 
     const clearSearch = () => {
-        if (activeCategory === null) {
-            setSearchResults([])
-            setNotFound(false)
-        }
+        setSearchResults(categoryResults)
         setQueryString('')
     }
 
@@ -193,6 +188,8 @@ export default function Home() {
         setShowConfirm(false);
     };
 
+    const resultItems = searchResults.length > 0 ? searchResults : categoryResults.length > 0 ? categoryResults : products
+
     return (
         <>
             <header ref={headerRef} className="site-header">
@@ -202,7 +199,7 @@ export default function Home() {
                     </div>
                     <div className="search-form">
                         <div className="form-group">
-                            <input className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
+                            <input ref={searchInputRef} className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
                             {((searchResults.length > 0 || notFound) && queryString !== "") ? <span className='search-icon' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span> : <span className='search-icon'><i className="fa-solid fa-search"></i></span>}
                         </div>
                     </div>
@@ -224,9 +221,9 @@ export default function Home() {
                     {/* activeCategory !== null && <div className="list sub-categories">
                         {subCategories.length > 0 && subCategories.map((item, index) => item.status === "1" && <div onClick={() => setSubCategoryResultsFunc(item.sub_cat_id)} key={index} className={`sub-category ${item.sub_cat_id === activeSubCategory && 'active'}`}>{item.title}</div>)}
                     </div> */}
-                    <div style={{ height: `calc(100dvh - ${cart.length > 0 ? (height + 64) : height}px)` }} className="list scroll">{searchResults.length > 0 ?
+                    <div style={{ height: `calc(100dvh - ${cart.length > 0 ? (height + 64) : height}px)` }} className="list scroll">{resultItems.length > 0 ?
                         <PerfectScrollbar options={{ suppressScrollX: true, wheelPropagation: false }} className="item-list">{
-                            searchResults.map((item, index) => <div key={index} className="item">
+                            resultItems.map((item, index) => <div key={index} className="item">
                                 <div className='item-inner'>
                                     {/* <div className="img"><img width="100" height="100" src="/dosa.webp" alt={item.title} /></div> */}
                                     <div className="meta">
@@ -253,7 +250,7 @@ export default function Home() {
                                     </div>
                                 </div>
                             </div>)}
-                        </PerfectScrollbar> : <p className='text-center'>No Dosa Categories</p>}
+                        </PerfectScrollbar> : <p className='text-center'>No Dosa Items</p>}
                     </div></>}
             </>
             {cart.length > 0 && <div className="cart-summary-badge">

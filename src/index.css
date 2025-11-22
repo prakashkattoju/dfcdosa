@@ -303,8 +303,8 @@ h4 {
 .dashboard .site-header-top {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    gap: 15px;
+    justify-content: space-between;
+    gap: 10px;
     padding: 10px 15px;
     border-bottom: 1px solid;
 }
@@ -330,17 +330,13 @@ h4 {
 }
 
 .inner.dashboard .navbar-nav {
-    display: none;
-    border-bottom: 1px solid;
+    display: block;
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
-    padding: 10px 15px;
-}
-
-.inner.dashboard .navbar-nav.show {
-    display: block;
+    padding-right: 10px;
+    border-right: 2px solid;
 }
 
 .inner.dashboard .navbar-nav .nav-item {
