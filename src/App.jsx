@@ -15,6 +15,7 @@ import Categories from "./pages/Categories";
 import Bill from "./pages/Bill";
 import OrderDetails from "./pages/OrderDetails";
 import Groceries from "./pages/Groceries";
+import Account from "./pages/Account";
 
 function App() {
   const dispatch = useDispatch();
@@ -48,6 +49,7 @@ function App() {
 
       <Route path="/cart" element={<ProtectedRoute allowedRoles={["user"]}><Cart /></ProtectedRoute>} />
       <Route path="/bill" element={<ProtectedRoute allowedRoles={["user"]}><Bill /> </ProtectedRoute>} />
+      <Route path="/account" element={<ProtectedRoute allowedRoles={["user"]}><Account /> </ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

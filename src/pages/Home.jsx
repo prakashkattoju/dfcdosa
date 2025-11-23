@@ -194,16 +194,18 @@ export default function Home() {
         <>
             <header ref={headerRef} className="site-header">
                 <div className='search-area d-flex gap-2 align-items-center justify-content-between'>
-                    <div role='button' onClick={backBtn}>
+                    <button className='icon-btn' onClick={backBtn}>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" /></svg>
-                    </div>
+                    </button>
                     <div className="search-form">
                         <div className="form-group">
                             <input ref={searchInputRef} className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
                             {((searchResults.length > 0 || notFound) && queryString !== "") ? <span className='search-icon' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span> : <span className='search-icon'><i className="fa-solid fa-search"></i></span>}
                         </div>
                     </div>
-                    <div onClick={() => setShowConfirm(true)} className='p-1'><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></div>
+                    <button className='icon-btn' onClick={() => navigate('/account')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z" /></svg></button>
+
+                    <button className='icon-btn' onClick={() => setShowConfirm(true)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></button>
                 </div>
                 {categories.length > 0 ? <div className="scroll-categories">
                     {categories.map((item, index) => item.status === "1" && <div key={index} className={`category ${activeCategory === item.category_id ? "active" : ""}`} onClick={() => setCategoryResultsFunc(item.category_id)}><img className='img' width="100" height="100" src="/dosa.webp" alt={item.title} /><span className='text'>{item.title}</span>

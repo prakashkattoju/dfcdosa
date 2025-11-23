@@ -267,20 +267,12 @@ export default function Groceries() {
                 <div className="list">
                     {groceries.length > 0 ? <div className="item-list">{
                         groceries.map((item, index) => <div key={index} className="item">
-                            <div className='item-inner'>
-                                <div className="meta">
-                                    <h2 style={{width: '100%'}}>{item.main} <hr /></h2>
-                                    <div className="meta-inner">
-                                        <div className="meta-info">
-                                            {item.sub.map((item, index) => {
-                                                return (<div key={index} className='mb-2'><div className="price">{item}</div><div className="cart-action"></div></div>)
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <h2 style={{width: '100%'}}>{item.main} <hr /></h2>
+                            {item.sub.map((item, index) => {
+                                return (<div key={index} className='mb-2'><div className="price">{item}</div><div className="cart-action"></div></div>)
+                            })}
                         </div>)
-                    }</div> : <p className='text-center'>No Dosa Categories</p>
+                    }</div> : <p className='text-center'>No Groceries</p>
                     }
                 </div></>}
             <ConfirmModal

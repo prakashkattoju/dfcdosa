@@ -156,7 +156,7 @@ export default function Products() {
                   <h2>{item.title}</h2>
                   <div className="meta-inner">
                     <div className="meta-info">
-                      <div className="price">{priceDisplay(parseInt(item.unit_price))}</div>
+                      {/* <div className="price">{priceDisplay(parseInt(item.unit_price))}</div> */}
                       <span className="itemid"># {item.product_id}</span>
                     </div>
                     <div className="cart-action">
@@ -188,7 +188,7 @@ export default function Products() {
                   <h2>{item.title}</h2>
                   <div className="meta-inner">
                     <div className="meta-info">
-                      <div className="price">{priceDisplay(parseInt(item.unit_price))}</div>
+                      {/* <div className="price">{priceDisplay(parseInt(item.unit_price))}</div> */}
                       <span className="itemid"># {item.product_id}</span>
                     </div>
                     <div className="cart-action">
