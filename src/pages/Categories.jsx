@@ -258,7 +258,7 @@ export default function Categories() {
     <div className="menu-items">
       <div className="search-form d-flex align-items-center gap-2">
         <div className="form-group">
-          <input className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
+          <input id='search-control' className="form-control" type="text" value={queryString} onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
           {((searchResults.length > 0 || notFound) && queryString !== "") && <span className='search-icon' onClick={clearSearch}><i className="fa-solid fa-xmark"></i></span>}
         </div>
       </div>
@@ -277,8 +277,9 @@ export default function Categories() {
                     </div>
                     <div className="cart-action">
                       <div className="opt status">
-                        <label className="switch">
+                        <label htmlFor={`category-${item.category_id}`} className="switch">
                           <input
+                            id={`category-${item.category_id}`}
                             type="checkbox"
                             checked={toBoolean(item.status)}
                             onChange={() => handleChangeStatus(item.category_id, toBoolean(item.status))}

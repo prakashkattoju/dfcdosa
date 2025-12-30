@@ -39,13 +39,13 @@ function App() {
     <Routes>
       <Route path="/" element={isLoggedIn ? user_role === "user" ? <ProtectedRoute allowedRoles={["user"]}><Home /></ProtectedRoute> : <ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute> : <Login />} />
 
-      <Route path="/admin" element={isLoggedIn ? user_role === "user" ? <ProtectedRoute allowedRoles={["user"]}><Home /></ProtectedRoute> : <ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute> : <AdminLogin />} />
+      {/* <Route path="/admin" element={isLoggedIn ? user_role === "user" ? <ProtectedRoute allowedRoles={["user"]}><Home /></ProtectedRoute> : <ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute> : <AdminLogin />} /> */}
 
-      <Route path="/orders" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
+      {/* <Route path="/orders" element={<ProtectedRoute allowedRoles={["admin"]}><Dashboard /></ProtectedRoute>} />
       <Route path="/order-details" element={<ProtectedRoute allowedRoles={["admin"]}><OrderDetails /></ProtectedRoute>} />
       <Route path="/categories" element={<ProtectedRoute allowedRoles={["admin"]}><Categories /></ProtectedRoute>} />
       <Route path="/groceries" element={<ProtectedRoute allowedRoles={["admin"]}><Groceries /></ProtectedRoute>} />
-      <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} />
+      <Route path="/products" element={<ProtectedRoute allowedRoles={["admin"]}><Products /></ProtectedRoute>} /> */}
 
       <Route path="/cart" element={<ProtectedRoute allowedRoles={["user"]}><Cart /></ProtectedRoute>} />
       <Route path="/bill" element={<ProtectedRoute allowedRoles={["user"]}><Bill /> </ProtectedRoute>} />
