@@ -689,7 +689,7 @@ h4 {
 .list .item-list .item h2 {
     font-size: 14px;
     margin-top: 0;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     color: #e6e3da;
 }
 
@@ -731,7 +731,7 @@ h4 {
 .list .item-list .item .meta .meta-inner {
     width: 100%;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
 }
 
