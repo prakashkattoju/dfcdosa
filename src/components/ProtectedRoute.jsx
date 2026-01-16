@@ -5,6 +5,7 @@ import { setUserDetails } from '../store/userSlice';
 import { decodeToken } from 'react-jwt';
 import { logOut } from '../store/authSlice';
 import { GetUserByID } from '../services/Userservices';
+import AlertModal from './AlertModal';
 
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const dispatch = useDispatch();
@@ -16,8 +17,15 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const decodedToken = decodeToken(token);
   const user_id = decodedToken?.user_id;
   const user_role = decodedToken?.user_role;
+  const exp = decodedToken?.exp;
 
   const [loading, setLoading] = useState(false);
+
+  const [showAlert, setShowAlert] = useState({
+    title: null,
+    message: null,
+    show: false
+  });
 
   const fetchuser = useCallback(async () => {
     try {
@@ -32,8 +40,22 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }, [user_id]);
 
   useEffect(() => {
+    const expiryMs = exp * 1000;
+    // Check if the token has expired
+
+    console.log("expiryMs", expiryMs )
+    console.log("Date.now", Date.now())
+
+    if (Date.now() >= expiryMs) {
+      setShowAlert({
+        title: 'Session Expired',
+        message: 'Please Login Again',
+        show: true
+      })
+    }
     user_id && fetchuser();
   }, [fetchuser, user_id]);
+
 
   const logoutAccount = () => {
     dispatch(logOut()); // Dispatch the logout action to clear user state
@@ -56,7 +78,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   }
 
   return (
-    <div className={`site ${isLoggedIn && user_role === "admin" ? 'inner dashboard' : 'inner user'} ${cart.length > 0 && 'cart'}`}>
+    <div className={`site inner user ${cart.length > 0 ? 'cart' : ''}`}>
 
       {((user_role === "admin" && location.pathname !== "/order-details")) && <header className="site-header">
         <div className='site-header-top'>
@@ -89,6 +111,12 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
           </div>
         </article>
       </main>
+      <AlertModal
+        show={showAlert.show}
+        title={showAlert.title}
+        message={showAlert.message}
+        onClose={() => logoutAccount()}
+      />
     </div>
   );
 };

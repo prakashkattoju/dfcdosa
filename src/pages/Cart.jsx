@@ -12,7 +12,6 @@ import { decodeToken } from 'react-jwt';
 import { CreateBill } from '../services/Billservices';
 import { UpdateUserName } from '../services/Userservices';
 import ConfirmModal from '../components/ConfirmModal';
-
 import { FaSpinner } from "react-icons/fa";
 
 export default function Cart() {
@@ -91,6 +90,7 @@ export default function Cart() {
     };
 
     const handleConfirmSubmit = async () => {
+
         setLoading(true)
         const cartdata = {
             total_quantity: getCartQuantity(),
@@ -132,18 +132,14 @@ export default function Cart() {
     return (<>
         <header className="site-header">
             <div className='search-area d-flex gap-2 align-items-center justify-content-between'>
-                <button className='icon-btn' onClick={backBtn}>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>
-                </button>
+                <button className='icon-btn' onClick={backBtn}><i className="fa-solid fa-arrow-left"></i></button>
                 <div className="search-form">
                     <div className="form-group">
                         <input className="form-control" type="text" value="" onChange={(e) => setSearchResultsFunc(e.target.value)} placeholder="Search here..." autoComplete="off" disabled={loading} />
                         <span className='search-icon'><i className="fa-solid fa-search"></i></span>
                     </div>
                 </div>
-                <button className='icon-btn' onClick={() => navigate('/account')}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M480-480q-60 0-102-42t-42-102q0-60 42-102t102-42q60 0 102 42t42 102q0 60-42 102t-102 42ZM192-192v-96q0-23 12.5-43.5T239-366q55-32 116.29-49 61.29-17 124.5-17t124.71 17Q666-398 721-366q22 13 34.5 34t12.5 44v96H192Zm72-72h432v-24q0-5.18-3.03-9.41-3.02-4.24-7.97-6.59-46-28-98-42t-107-14q-55 0-107 14t-98 42q-5 4-8 7.72-3 3.73-3 8.28v24Zm216.21-288Q510-552 531-573.21t21-51Q552-654 530.79-675t-51-21Q450-696 429-674.79t-21 51Q408-594 429.21-573t51 21Zm-.21-72Zm0 360Z" /></svg></button>
-
-                <button className='icon-btn' onClick={() => setShowConfirm(true)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" /></svg></button>
+                <button className='icon-btn-s' onClick={() => setShowConfirm(true)}><i className="fa-solid fa-arrow-right-from-bracket"></i></button>
             </div>
         </header>
         <div>
@@ -162,11 +158,10 @@ export default function Cart() {
             </div>} */}
             {cart.length > 0 ?
                 <>
-                    <div className="list scroll">
+                    <div className="list cart-list scroll">
                         <div className="item-list">
                             {cart.map((item, index) => <div key={index} className="item">
                                 <div className='item-inner'>
-                                    <button className='remove-item' onClick={() => remove(item.product_id)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" /></svg></button>
                                     <div className="meta">
                                         <h2>{item.title}</h2>
                                         <div className="meta-inner">
@@ -179,45 +174,35 @@ export default function Cart() {
                                                     <button className="minus-item" onClick={() => decrement(item.product_id)}><i className="fa-solid fa-minus"></i></button>
                                                     <div className="qty">{getQuantity(parseInt(item.product_id))}</div>
                                                     <button className="plus-item" onClick={() => increment(item.product_id)}><i className="fa-solid fa-plus"></i></button>
+                                                    <div className="price">{priceDisplay(parseInt(item.unit_price) * item.quantity).replace("₹", "")}</div>
                                                 </div>
                                             </div>
+                                            <button className='remove-item' onClick={() => remove(item.product_id)}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" /></svg></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>)}
-                            <div className="item">
+                            {/* <div className="item">
                                 <div className='item-inner'>
                                     <div className="meta">
                                         <div className="meta-inner">
                                             <div className="meta-info">
-                                                <div className="price">No. Items</div>
-                                            </div>
-                                            <div className="meta-info">
-                                                <div className="price text-end">{getCartQuantity()}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="item">
-                                <div className='item-inner'>
-                                    <div className="meta">
-                                        <div className="meta-inner">
-                                            <div className="meta-info">
+                                                <div className="price mb-3">No. Items</div>
                                                 <div className="price">Total</div>
                                             </div>
                                             <div className="meta-info">
+                                                <div className="price text-end mb-3">{getCartQuantity()}</div>
                                                 <div className="price text-end">{getCartAmount()}</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="addmore"><p>If you want add more items.</p><button type="button" className="btn toggle" onClick={() => navigate("/", { replace: true })}>Add More</button></div>
                     <div className="cart-summary-badge">
-                        <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()}</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
+                        <div className="cart-bottom-bar"><strong className="total-count">{getCartQuantity()} items</strong> | <strong className="total-cart">{getCartAmount()}</strong></div>
                         <div className="continue">
                             <button className="btn" onClick={() => setShowPromptModal(true)}>Submit</button>
                         </div>

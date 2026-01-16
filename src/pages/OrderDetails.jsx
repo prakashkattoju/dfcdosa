@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import priceDisplay from '../util/priceDisplay';
 import { format } from 'date-fns'
 import { ChangeOrderStatus } from '../services/Billservices';
@@ -9,6 +10,7 @@ import { FaSpinner } from "react-icons/fa";
 export default function OrderDetails() {
     const location = useLocation();
     const navigate = useNavigate();
+    const user = useSelector((state) => state.user);
     const [orderDetails, setOrderDetails] = useState(location.state ? location.state : [])
     const [loading, setLoading] = useState(false);
     const [showAlert, setShowAlert] = useState({
@@ -17,86 +19,22 @@ export default function OrderDetails() {
         show: false
     });
 
-    async function connectAndPrint() {
-        try {
-            const device = await navigator.bluetooth.requestDevice({
-                filters: [{ namePrefix: "BT" }], // Change to match your printer name
-                optionalServices: ["0000ffe0-0000-1000-8000-00805f9b34fb"], // common for ESC/POS BLE printers
-            });
-
-            const server = await device.gatt.connect();
-
-            const service = await server.getPrimaryService(
-                "0000ffe0-0000-1000-8000-00805f9b34fb"
-            );
-            const characteristic = await service.getCharacteristic(
-                "0000ffe1-0000-1000-8000-00805f9b34fb"
-            );
-
-            const encoder = new TextEncoder();
-            const data = encoder.encode("Hello from React Web Bluetooth!\n\n");
-
-            const CHUNK_SIZE = 180;
-            for (let i = 0; i < data.length; i += CHUNK_SIZE) {
-                const chunk = data.slice(i, i + CHUNK_SIZE);
-                await characteristic.writeValue(chunk);
-            }
-
-            alert("Print command sent successfully!");
-        } catch (error) {
-            console.error("Print failed:", error);
-            alert("Failed to print: " + error.message);
-        }
-    }
-
-    const toBoolean = (value) => {
-        return value === "1" || value === 1 || value === true;
-    };
-
-    const handleChangeStatus = async (bill_id, status) => {
-        setLoading(true)
-        try {
-            const res = await ChangeOrderStatus({
-                bill_id: bill_id,
-                status: status
-            });
-            if (res.status) {
-
-                setShowAlert({
-                    title: 'Done!',
-                    message: 'Changed the order status as completed.',
-                    show: true
-                })
-            }
-        } catch (error) {
-            console.error("Failed to change status:", error);
-        } finally {
-            setLoading(false)
-        }
+    const onClose = () => {
+        navigate(-1);
     }
 
     return (
         <>
-            <header className="site-header">
-                <div className='site-header-top'>
-                    <div role="button" className="nav-item me-auto d-flex gap-2 justify-content-start" onClick={() => navigate('/', { state: orderDetails.dcreated_on })}><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" /></svg>Back</div>
-                    <div className="navbar-nav order-details show">
-                        {orderDetails.status == 0 && <div className="nav-item">
-                            <button onClick={() => handleChangeStatus(orderDetails.bill_id, toBoolean(orderDetails.status))} className="order-opt">{loading ? <FaSpinner className="animate-spin" /> : <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" /></svg>}Complete</button>
-                        </div>}
-                        <div className="nav-item"><button onClick={connectAndPrint} className="order-opt"><svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="currentColor"><path d="M640-640v-120H320v120h-80v-200h480v200h-80Zm-480 80h640-640Zm560 100q17 0 28.5-11.5T760-500q0-17-11.5-28.5T720-540q-17 0-28.5 11.5T680-500q0 17 11.5 28.5T720-460Zm-80 260v-160H320v160h320Zm80 80H240v-160H80v-240q0-51 35-85.5t85-34.5h560q51 0 85.5 34.5T880-520v240H720v160Zm80-240v-160q0-17-11.5-28.5T760-560H200q-17 0-28.5 11.5T160-520v160h80v-80h480v80h80Z" /></svg>Print</button></div>
-                    </div>
-                </div>
-            </header>
             <div id="orderDetails" className="bill-details">
+                <button type="button" className="btn-close" onClick={onClose}></button>
+                <h2 className='text-start'>Hello, {user.fullname ? user.fullname : 'User'}</h2>
+                <h4 className='text-start'><span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor"><path d="M280-40q-33 0-56.5-23.5T200-120v-720q0-33 23.5-56.5T280-920h400q33 0 56.5 23.5T760-840v124q18 7 29 22t11 34v80q0 19-11 34t-29 22v404q0 33-23.5 56.5T680-40H280Zm0-80h400v-720H280v720Zm0 0v-720 720Zm200-600q17 0 28.5-11.5T520-760q0-17-11.5-28.5T480-800q-17 0-28.5 11.5T440-760q0 17 11.5 28.5T480-720Z" /></svg> {user.mobile}</span></h4>
+                <hr />
                 <table>
                     <thead>
                         <tr className='token'><th className='pb-0' colSpan={2}>Token No</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{orderDetails.token_num}</th></tr>
                         <tr><th colSpan={5} className='sep pb-0'></th></tr>
                         <tr><th className='pb-0' colSpan={2}>Date</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{format(new Date(orderDetails.dcreated_on), 'dd-MM-yyyy')}</th></tr>
-                        <tr><th colSpan={5} className='sep pb-0'></th></tr>
-                        <tr><th className='pb-0' colSpan={2}>Name</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{orderDetails.uname}</th></tr>
-                        <tr><th className='pb-0' colSpan={2}>Mobile Number</th><th className='pb-0'>:</th><th className='pb-0' colSpan={2}>{orderDetails.mobile}</th></tr>
                         <tr><th colSpan={5} className='sep pb-0'></th></tr>
                         <tr><th className='pid'>#</th><th className='pname'>Items</th><th>Qty</th><th>I.Rs.</th><th>Rs.</th></tr>
                     </thead>
@@ -110,22 +48,14 @@ export default function OrderDetails() {
                     </tbody>
                 </table>
             </div>
-            {/* {orderDetails.status == 0 && <div className="cart-summary mb-3">
-                <div className="noitems">Change order status, if Completed</div>
-                <button onClick={() => handleChangeStatus(orderDetails.bill_id, toBoolean(orderDetails.status))} className="ftotal">{loading ? <FaSpinner className="animate-spin" /> : <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="currentColor"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" /></svg>}</button>
-            </div>}
-            <div className="cart-summary">
-                <div className="noitems">Print the order details</div>
-                <button onClick={connectAndPrint} className="ftotal"><svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px" fill="currentColor"><path d="M640-640v-120H320v120h-80v-200h480v200h-80Zm-480 80h640-640Zm560 100q17 0 28.5-11.5T760-500q0-17-11.5-28.5T720-540q-17 0-28.5 11.5T680-500q0 17 11.5 28.5T720-460Zm-80 260v-160H320v160h320Zm80 80H240v-160H80v-240q0-51 35-85.5t85-34.5h560q51 0 85.5 34.5T880-520v240H720v160Zm80-240v-160q0-17-11.5-28.5T760-560H200q-17 0-28.5 11.5T160-520v160h80v-80h480v80h80Z" /></svg></button>
-            </div> */}
-            <AlertModal
+            {/* <AlertModal
                 show={showAlert.show}
                 title={showAlert.title}
                 message={showAlert.message}
                 onClose={() => {
                     navigate('/', { state: orderDetails.dcreated_on })
                 }}
-            />
+            /> */}
         </>
     )
 }

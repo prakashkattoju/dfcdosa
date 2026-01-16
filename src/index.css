@@ -253,7 +253,7 @@ html {
 body {
     background: #212121;
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     color: #e9b328;
 }
@@ -269,7 +269,7 @@ a {
 
 .h4,
 h4 {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .skeleton {
@@ -368,7 +368,7 @@ h4 {
     background-color: #e9b328;
     border: 0;
     display: flex;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     align-items: center;
     justify-content: space-between;
@@ -378,7 +378,7 @@ h4 {
 }
 
 .navi {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -596,7 +596,7 @@ h4 {
     white-space: nowrap;
     margin-right: 15px;
     border-radius: 25px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .list.sub-categories .sub-category:last-child {
@@ -681,6 +681,10 @@ h4 {
     /* border-bottom: 2px dotted #9a7414; */
 }
 
+.list .item-list .item:last-child {
+    margin-bottom: 0;
+}
+
 .list .item-list.categories .item:first-child {
     border-top: 0;
     padding-top: 0;
@@ -689,7 +693,7 @@ h4 {
 .list .item-list .item h2 {
     font-size: 14px;
     margin-top: 0;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     color: #e6e3da;
 }
 
@@ -755,13 +759,13 @@ h4 {
 .list .item-list .item .meta .itemid {
     display: none;
     position: absolute;
-    font-size: 12px;
+    font-size: 14px;
     bottom: 0;
     left: 0;
 }
 
 .list .item-list .item .meta .price {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1;
     font-weight: 700;
 }
@@ -787,7 +791,7 @@ h4 {
 }
 
 .list .item-list .item .meta .cart-action .btnAddAction,
-.list .item-list .item .meta .cart-action .opt button {
+.list .item-list .item .meta .cart-action .opt button:not(.remove-item) {
     width: 28px;
     border: 0;
     padding: 5px;
@@ -796,6 +800,7 @@ h4 {
     color: #212121;
     font-weight: 500;
     cursor: pointer;
+    text-transform: uppercase;
 }
 
 .list .item-list .item .meta .cart-action .opt button.edit {
@@ -805,6 +810,10 @@ h4 {
     font-size: 21px;
 }
 
+.list .item-list .item .meta .cart-action .opt .price {
+    margin-left: auto;
+    margin-right: 15px;
+}
 
 .list .item-list .item .meta .cart-action .btnAddAction.init {
     width: auto;
@@ -815,6 +824,10 @@ h4 {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+}
+
+.list.cart-list .item-list .item .meta .cart-action .opt {
+    justify-content: flex-start;
 }
 
 .list .item-list .item .meta .cart-action .opt.status {
@@ -870,7 +883,7 @@ form.list .form-group .p-dropdown {
     border: 2px solid;
     background-color: transparent;
     width: 100%;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     line-height: 1.5;
     border-radius: var(--bs-border-radius);
@@ -1036,8 +1049,9 @@ form.list button:hover {
     border-radius: 3px;
     background: #212121;
     color: #e9b328;
-    font-weight: 400;
+    font-weight: 500;
     cursor: pointer;
+    text-transform: uppercase;
 }
 
 .cart-summary-badge button:hover {
@@ -1047,18 +1061,18 @@ form.list button:hover {
 
 .cart-summary-badge .continue {
     position: relative;
-    width: 30%;
+    width: 40%;
 }
 
 .cart-bottom-bar {
-    font-size: 24px;
+    font-size: 20px;
     display: inline-block;
     width: 55%;
 }
 
 .cart-summary-badge .btn {
     display: block;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     cursor: pointer;
     width: 100%;
@@ -1107,12 +1121,12 @@ form.list button:hover {
 
 .tbl-cart .cart-item {
     padding-bottom: 15px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
 }
 
 .tbl-cart .cart-item .pname {
-    font-size: 16px;
+    font-size: 14px;
     max-width: 90%;
     white-space: nowrap;
     overflow: hidden;
@@ -1222,8 +1236,8 @@ form.list button:hover {
 }
 
 .addmore {
-    margin-top: 40px;
-    font-size: 16px;
+    margin-top: 20px;
+    font-size: 14px;
     font-weight: 600;
     text-align: center;
 }
@@ -1232,7 +1246,7 @@ form.list button:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     margin-bottom: 15px;
     text-align: center;
@@ -1345,7 +1359,7 @@ form.list button:hover {
 .cart-summary-review .tbl-cart .btn,
 .addmore .btn,
 .dfc-modal .modal-footer .btn {
-    font-size: 18px;
+    font-size: 14px;
     display: inline-block;
     border: 0;
     padding: 6px 15px;
@@ -1354,11 +1368,12 @@ form.list button:hover {
     color: #212121;
     font-weight: 500;
     cursor: pointer;
+    text-transform: uppercase;
 }
 
 #orders-tab .nav-link {
     position: relative;
-    font-size: 16px;
+    font-size: 14px;
     color: #e9b328;
     font-weight: 600;
 }
@@ -1379,7 +1394,7 @@ form.list button:hover {
 } */
 
 #orders-tabContent .table {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 #orders-tabContent .table thead th,
@@ -1475,9 +1490,7 @@ input:checked+.slider::before {
 .bill-details table {
     position: relative;
     width: 100%;
-    padding: 10px;
     font-weight: 600;
-    display: block;
     background: #ffffff;
     color: #212121;
 }
@@ -1504,8 +1517,12 @@ input:checked+.slider::before {
     border-bottom: 2px dashed #212121;
 }
 
+.bill-details table.table-striped thead {
+    border-style: solid;
+}
+
 .bill-details table th {
-    padding: 10px 10px 10px 0;
+    padding: 10px;
 }
 
 .bill-details table th.pid,
@@ -1528,7 +1545,7 @@ input:checked+.slider::before {
 }
 
 .bill-details table td {
-    padding: 10px 10px 0 0;
+    padding: 10px 10px 0 10px;
 }
 
 .bill-details table tr:last-child td {
@@ -1609,13 +1626,22 @@ input:checked+.slider::before {
 
 .icon-btn:focus,
 .icon-btn:active,
-.icon-btn{
+.icon-btn {
+    font-size: 24px;
     border: 0;
     color: #e9b328;
     background: transparent;
     padding: .25rem !important;
 }
-
+.icon-btn-s:focus,
+.icon-btn-s:active,
+.icon-btn-s {
+    font-size: 21px;
+    border: 0;
+    color: #e9b328;
+    background: transparent;
+    padding: .25rem !important;
+}
 .remove-item {
     border: 0;
     background: transparent;
@@ -1626,4 +1652,34 @@ input:checked+.slider::before {
 .remove-item:active {
     outline: 0;
     border: 0;
+}
+
+.chip {
+    width: 60px;
+    display: inline-block;
+    padding: 3px 6px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.chip--paid {
+    color: #589104;
+    background-color: #e6f5ce;
+}
+
+.chip--unpaid {
+    color: #b92e03;
+    background-color: #facdbf;
+}
+
+.items-more-title {
+    color: #ffffff;
+    display: inline-block;
+    max-width: 130px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: text-top;
 }
